@@ -1,7 +1,1788 @@
 {
     "clients": {
         "header": {
-            "subtitle": "ניהול לקוחות"
+            "subtitle": "ניהול לקוחות",
+            "count": "{{count}} לקוחות {{found}}",
+            "found": "נמצאו"
+        },
+        "search": {
+            "placeholder": "חפש לקוחות..."
+        },
+        "actions": {
+            "addNew": "הוסף לקוח חדש"
+        },
+        "stats": {
+            "total": "סה\"כ לקוחות",
+            "active": "פעיל",
+            "inactive": "לא פעיל"
+        },
+        "emptyState": {
+            "noClients": "אין לקוחות עדיין",
+            "noResults": "לא נמצאו לקוחות",
+            "startAdding": "התחל בכך שתיצור את הלקוח הראשון שלך.",
+            "tryDifferentSearch": "נסה לשנות את מונחי החיפוש."
+        },
+        "list": {
+            "title": "כל הלקוחות",
+            "description": "נהל וצפה בכל הלקוחות שלך במקום אחד.",
+            "status": {
+                "active": "פעיל",
+                "inactive": "לא פעיל"
+            },
+            "tooltips": {
+                "view": "צפה בפרטי הלקוח",
+                "edit": "ערוך לקוח",
+                "delete": "מחק לקוח"
+            }
+        },
+        "upsert": {
+            "title": {
+                "create": "הוסף לקוח חדש",
+                "edit": "ערוך לקוח"
+            },
+            "fields": {
+                "contactFirstname": {
+                    "label": "שם פרטי",
+                    "placeholder": "הכנס שם פרטי"
+                },
+                "contactLastname": {
+                    "label": "שם משפחה",
+                    "placeholder": "הכנס שם משפחה"
+                },
+                "name": {
+                    "label": "שם חברה",
+                    "placeholder": "הכנס שם חברה"
+                },
+                "description": {
+                    "label": "תיאור",
+                    "placeholder": "הכנס תיאור חברה"
+                },
+                "legalId": {
+                    "label": "מספר עוסק",
+                    "placeholder": "הכנס מספר עוסק"
+                },
+                "vat": {
+                    "label": "מספר מע\"מ",
+                    "placeholder": "הכנס מספר מע\"מ (לדוגמה, FR12345678901)"
+                },
+                "currency": {
+                    "label": "מטבע"
+                },
+                "foundedAt": {
+                    "label": "תאריך ייסוד",
+                    "placeholder": "בחר תאריך ייסוד"
+                },
+                "contactEmail": {
+                    "label": "דוא\"ל",
+                    "placeholder": "הכנס כתובת דוא\"ל"
+                },
+                "contactPhone": {
+                    "label": "טלפון",
+                    "placeholder": "הכנס מספר טלפון"
+                },
+                "address": {
+                    "label": "כתובת",
+                    "placeholder": "הכנס כתובת רחוב"
+                },
+                "addressLine2": {
+                    "label": "שורת כתובת 2 (אופציונלי)",
+                    "placeholder": "דירה, חדר, יחידה, בניין, קומה, וכו'."
+                },
+                "postalCode": {
+                    "label": "מיקוד",
+                    "placeholder": "הכנס מיקוד"
+                },
+                "city": {
+                    "label": "עיר",
+                    "placeholder": "הכנס עיר"
+                },
+                "state": {
+                    "label": "מדינה/פרובינציה (אופציונלי)",
+                    "placeholder": "הכנס מדינה או פרובינציה"
+                },
+                "type": {
+                    "label": "סוג לקוח",
+                    "company": "חברה",
+                    "individual": "יחיד",
+                    "description": "בחר האם הלקוח הוא יחיד או חברה"
+                },
+                "country": {
+                    "label": "מדינה",
+                    "placeholder": "הכנס מדינה"
+                }
+            },
+            "validation": {
+                "name": {
+                    "required": "שם חברה הוא שדה חובה"
+                },
+                "description": {
+                    "required": "תיאור הוא שדה חובה",
+                    "maxLength": "התיאור חייב להיות פחות מ-500 תווים"
+                },
+                "legalId": {
+                    "required": "מספר עוסק הוא שדה חובה",
+                    "empty": "מספר עוסק לא יכול להיות ריק",
+                    "maxLength": "מספר עוסק חייב להיות פחות מ-50 תווים"
+                },
+                "vat": {
+                    "required": "מספר מע\"מ הוא שדה חובה",
+                    "empty": "מספר מע\"מ לא יכול להיות ריק",
+                    "maxLength": "מספר מע\"מ חייב להיות פחות מ-15 תווים",
+                    "format": "פורמט מספר מע\"מ אינו תקין (לדוגמה, FR12345678901)"
+                },
+                "foundedAt": {
+                    "future": "תאריך ייסוד לא יכול להיות בעתיד"
+                },
+                "contactFirstname": {
+                    "required": "שם פרטי הוא שדה חובה"
+                },
+                "contactLastname": {
+                    "required": "שם משפחה הוא שדה חובה"
+                },
+                "contactPhone": {
+                    "minLength": "מספר הטלפון חייב להיות לפחות 8 תווים",
+                    "format": "פורמט מספר הטלפון אינו תקין"
+                },
+                "contactEmail": {
+                    "required": "דוא\"ל הוא שדה חובה",
+                    "format": "פורמט הדוא\"ל אינו תקין"
+                },
+                "address": {
+                    "required": "כתובת היא שדה חובה"
+                },
+                "postalCode": {
+                    "format": "פורמט המיקוד אינו תקין"
+                },
+                "city": {
+                    "required": "עיר היא שדה חובה"
+                },
+                "country": {
+                    "required": "מדינה היא שדה חובה"
+                }
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "create": "צור לקוח",
+                "save": "שמור שינויים"
+            }
+        },
+        "view": {
+            "title": "פרטי לקוח",
+            "description": "צפה בכל המידע הרלוונטי על לקוח זה.",
+            "fields": {
+                "companyName": "שם חברה",
+                "contactPerson": "איש קשר",
+                "email": "דוא\"ל",
+                "phone": "טלפון",
+                "address": "כתובת",
+                "addressLine2": "שורת כתובת 2",
+                "postalCode": "מיקוד",
+                "city": "עיר",
+                "state": "מדינה/פרובינציה",
+                "country": "מדינה"
+            }
+        },
+        "delete": {
+            "title": "מחק לקוח",
+            "description": "האם אתה בטוח שברצונך למחוק לקוח זה? פעולה זו אינה ניתנת לביטול.",
+            "actions": {
+                "cancel": "ביטול",
+                "delete": "מחק לקוח"
+            }
         }
+    },
+    "quotes": {
+        "header": {
+            "subtitle": "ניהול הצעות מחיר",
+            "count": "{{count}} הצעות מחיר {{found}}",
+            "found": "נמצאו"
+        },
+        "search": {
+            "placeholder": "חפש הצעות מחיר..."
+        },
+        "actions": {
+            "addNew": "הוסף הצעת מחיר חדשה"
+        },
+        "stats": {
+            "total": "סה\"כ הצעות מחיר",
+            "draft": "טיוטה",
+            "signed": "חתום"
+        },
+        "emptyState": {
+            "noQuotes": "אין הצעות מחיר עדיין",
+            "noResults": "לא נמצאו הצעות מחיר",
+            "startAdding": "התחל בכך שתיצור את הצעת המחיר הראשונה שלך.",
+            "tryDifferentSearch": "נסה לשנות את מונחי החיפוש."
+        },
+        "list": {
+            "title": "כל הצעות המחיר",
+            "description": "נהל וצפה בכל הצעות המחיר שלך במקום אחד.",
+            "status": {
+                "draft": "טיוטה",
+                "sent": "נשלח",
+                "expired": "פג תוקף",
+                "signed": "חתום"
+            },
+            "item": {
+                "title": "הצעת מחיר {{number}} {{title}}",
+                "client": "לקוח",
+                "issued": "הונפק",
+                "validUntil": "בתוקף עד",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalTTC": "סה\"כ (כולל מע\"מ)"
+            },
+            "tooltips": {
+                "view": "צפה בפרטי הצעת המחיר",
+                "viewPdf": "צפה ב-PDF",
+                "downloadPdf": "הורד PDF",
+                "edit": "ערוך הצעת מחיר",
+                "sendSignature": "שלח לחתימה",
+                "resendSignature": "שלח שוב לחתימה",
+                "createInvoice": "צור חשבונית מהצעת מחיר",
+                "delete": "מחק הצעת מחיר"
+            },
+            "actions": {
+                "addNew": "הוסף הצעת מחיר חדשה"
+            },
+            "messages": {
+                "sendSignatureError": "שליחת הצעת המחיר לחתימה נכשלה",
+                "sendSignatureSuccess": "הצעת המחיר נשלחה לחתימה בהצלחה",
+                "invoiceCreated": "החשבונית נוצרה בהצלחה מהצעת המחיר",
+                "invoiceCreateError": "יצירת החשבונית מהצעת המחיר נכשלה"
+            }
+        },
+        "upsert": {
+            "title": {
+                "create": "צור הצעת מחיר חדשה",
+                "edit": "ערוך הצעת מחיר"
+            },
+            "form": {
+                "title": {
+                    "label": "כותרת",
+                    "placeholder": "הכנס כותרת להצעת המחיר"
+                },
+                "client": {
+                    "label": "לקוח",
+                    "placeholder": "בחר לקוח",
+                    "errors": {
+                        "required": "נא לבחור לקוח"
+                    },
+                    "noOptions": "אין לקוחות זמינים. נא לצור לקוח תחילה."
+                },
+                "currency": {
+                    "label": "מטבע"
+                },
+                "discountRate": {
+                    "label": "הנחה (%)",
+                    "placeholder": "הכנס אחוז הנחה",
+                    "description": "מוחל לפני חישוב המע\"מ.",
+                    "errors": {
+                        "required": "שיעור ההנחה הוא שדה חובה",
+                        "min": "ההנחה לא יכולה להיות שלילית",
+                        "max": "ההנחה לא יכולה לעלות על 100%"
+                    }
+                },
+                "validUntil": {
+                    "label": "בתוקף עד",
+                    "placeholder": "בחר תאריך תפוגה"
+                },
+                "items": {
+                    "label": "פריטי הצעת המחיר",
+                    "addItem": "הוסף פריט",
+                    "description": {
+                        "placeholder": "תיאור פריט",
+                        "errors": {
+                            "required": "תיאור הוא שדה חובה"
+                        }
+                    },
+                    "quantity": {
+                        "placeholder": "כמות",
+                        "unit": "יח'",
+                        "errors": {
+                            "required": "כמות היא שדה חובה",
+                            "min": "הכמות חייבת להיות לפחות 1",
+                            "invalid": "כמות לא תקינה"
+                        }
+                    },
+                    "unitPrice": {
+                        "placeholder": "מחיר ליחידה",
+                        "errors": {
+                            "required": "מחיר ליחידה הוא שדה חובה",
+                            "min": "מחיר ליחידה חייב להיות חיובי",
+                            "invalid": "מחיר ליחידה לא תקין"
+                        }
+                    },
+                    "vatRate": {
+                        "placeholder": "מע\"מ %",
+                        "errors": {
+                            "required": "שיעור המע\"מ הוא שדה חובה",
+                            "min": "שיעור המע\"מ חייב להיות חיובי"
+                        }
+                    }
+                },
+                "notes": {
+                    "label": "הערות",
+                    "placeholder": "הערות או תנאים נוספים"
+                },
+                "paymentMethod": {
+                    "label": "אמצעי תשלום",
+                    "placeholder": "בחר אמצעי תשלום",
+                    "description": "אמצעי התשלום המועדף עבור הצעת מחיר זו (לדוגמה, העברה בנקאית, צ'ק, וכו')"
+                },
+                "paymentDetails": {
+                    "label": "פרטי תשלום",
+                    "placeholder": "הכנס פרטי תשלום",
+                    "description": "מידע נוסף לתשלום (לדוגמה, IBAN, הוראות, וכו')"
+                }
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "create": "צור הצעת מחיר",
+                "save": "שמור שינויים"
+            }
+        },
+        "view": {
+            "title": "הצעת מחיר {{number}}",
+            "description": "צפה בכל פרטי הצעת מחיר זו.",
+            "status": {
+                "draft": "טיוטה",
+                "sent": "נשלח",
+                "expired": "פג תוקף",
+                "signed": "חתום"
+            },
+            "fields": {
+                "title": "כותרת",
+                "status": "סטטוס",
+                "createdAt": "נוצר",
+                "validUntil": "בתוקף עד",
+                "signedAt": "נחתם בתאריך",
+                "client": "לקוח",
+                "signedBy": "נחתם על ידי",
+                "discountRate": "שיעור הנחה",
+                "discountAmount": "סכום הנחה",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalVAT": "סכום מע\"מ",
+                "totalTTC": "סה\"כ (כולל מע\"מ)",
+                "signature": "חתימה"
+            }
+        },
+        "delete": {
+            "title": "מחק הצעת מחיר",
+            "description": "האם אתה בטוח שברצונך למחוק הצעת מחיר זו? פעולה זו אינה ניתנת לביטול.",
+            "actions": {
+                "cancel": "ביטול",
+                "delete": "מחק הצעת מחיר"
+            }
+        },
+        "pdf": {
+            "title": "הצעת מחיר {{number}} - PDF"
+        }
+    },
+    "invoices": {
+        "header": {
+            "subtitle": "ניהול חשבוניות",
+            "count": "{{count}} חשבוניות {{found}}",
+            "found": "נמצאו"
+        },
+        "search": {
+            "placeholder": "חפש חשבוניות..."
+        },
+        "actions": {
+            "addNew": "הוסף חשבונית חדשה"
+        },
+        "stats": {
+            "total": "סה\"כ חשבוניות",
+            "sent": "נשלח",
+            "paid": "שולם"
+        },
+        "emptyState": {
+            "noInvoices": "אין חשבוניות עדיין",
+            "noResults": "לא נמצאו חשבוניות",
+            "startAdding": "התחל בכך שתיצור את החשבונית הראשונה שלך.",
+            "tryDifferentSearch": "נסה לשנות את מונחי החיפוש."
+        },
+        "list": {
+            "title": "כל החשבוניות",
+            "description": "נהל וצפה בכל החשבוניות שלך במקום אחד.",
+            "status": {
+                "sent": "נשלח",
+                "unpaid": "לא שולם",
+                "overdue": "באיחור",
+                "paid": "שולם"
+            },
+            "item": {
+                "title": "חשבונית {{number}} {{title}}",
+                "client": "לקוח",
+                "issued": "הונפק",
+                "due": "לתשלום עד",
+                "payment": "תשלום",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalTTC": "סה\"כ (כולל מע\"מ)"
+            },
+            "tooltips": {
+                "view": "צפה בפרטי החשבונית",
+                "viewPdf": "צפה ב-PDF",
+                "downloadPdf": "הורד PDF",
+                "edit": "ערוך חשבונית",
+                "markAsPaid": "סמן כשולם",
+                "delete": "מחק חשבונית",
+                "createReceipt": "צור קבלה מחשבונית זו",
+                "sendByEmail": "שלח חשבונית בדוא\"ל"
+            },
+            "actions": {
+                "addNew": "הוסף חשבונית חדשה",
+                "downloadPdf": "הורד PDF",
+                "downloadXml": "הורד XML"
+            },
+            "downloadFormats": {
+                "pdf": "PDF רגיל",
+                "facturx": "Factur-X",
+                "zugferd": "ZUGFeRD",
+                "xrechnung": "XRechnung",
+                "ubl": "UBL",
+                "cii": "CII"
+            },
+            "messages": {
+                "markAsPaidSuccess": "החשבונית סומנה כשולם בהצלחה",
+                "markAsPaidError": "סימון החשבונית כשולם נכשל",
+                "createReceiptSuccess": "הקבלה נוצרה בהצלחה מהחשבונית",
+                "sendByEmailSuccess": "החשבונית נשלחה ללקוח"
+            }
+        },
+        "upsert": {
+            "title": {
+                "create": "צור חשבונית חדשה",
+                "edit": "ערוך חשבונית"
+            },
+            "form": {
+                "quote": {
+                    "label": "מהצעת מחיר",
+                    "placeholder": "בחר הצעת מחיר",
+                    "errors": {
+                        "required": "נא לבחור הצעת מחיר"
+                    }
+                },
+                "client": {
+                    "label": "לקוח",
+                    "placeholder": "בחר לקוח",
+                    "errors": {
+                        "required": "נא לבחור לקוח"
+                    },
+                    "noOptions": "אין לקוחות זמינים. נא לצור לקוח תחילה."
+                },
+                "currency": {
+                    "label": "מטבע"
+                },
+                "discountRate": {
+                    "label": "הנחה (%)",
+                    "placeholder": "הכנס אחוז הנחה",
+                    "description": "מוחל לפני חישוב המע\"מ.",
+                    "errors": {
+                        "required": "שיעור ההנחה הוא שדה חובה",
+                        "min": "ההנחה לא יכולה להיות שלילית",
+                        "max": "ההנחה לא יכולה לעלות על 100%"
+                    }
+                },
+                "dueDate": {
+                    "label": "תאריך פירעון",
+                    "placeholder": "בחר תאריך פירעון"
+                },
+                "items": {
+                    "label": "פריטי חשבונית",
+                    "addItem": "הוסף פריט",
+                    "description": {
+                        "placeholder": "תיאור פריט",
+                        "errors": {
+                            "required": "תיאור הוא שדה חובה"
+                        }
+                    },
+                    "quantity": {
+                        "placeholder": "כמות",
+                        "unit": "יח'",
+                        "errors": {
+                            "required": "כמות היא שדה חובה",
+                            "min": "הכמות חייבת להיות לפחות 1",
+                            "invalid": "כמות לא תקינה"
+                        }
+                    },
+                    "unitPrice": {
+                        "placeholder": "מחיר ליחידה",
+                        "errors": {
+                            "required": "מחיר ליחידה הוא שדה חובה",
+                            "min": "מחיר ליחידה חייב להיות חיובי",
+                            "invalid": "מחיר ליחידה לא תקין"
+                        }
+                    },
+                    "vatRate": {
+                        "placeholder": "מע\"מ %",
+                        "errors": {
+                            "required": "שיעור המע\"מ הוא שדה חובה",
+                            "min": "שיעור המע\"מ חייב להיות חיובי"
+                        }
+                    },
+                    "type": {
+                        "label": "סוג",
+                        "hour": "שעה",
+                        "day": "יום",
+                        "deposit": "מקדמה/תשלום ראשוני",
+                        "service": "שירות",
+                        "product": "מוצר"
+                    }
+                },
+                "notes": {
+                    "label": "הערות",
+                    "placeholder": "הערות או תנאים נוספים"
+                },
+                "paymentMethod": {
+                    "label": "אמצעי תשלום",
+                    "placeholder": "בחר אמצעי תשלום",
+                    "description": "אמצעי התשלום המועדף עבור הצעת מחיר זו (לדוגמה, העברה בנקאית, צ'ק, וכו')"
+                },
+                "paymentDetails": {
+                    "label": "פרטי תשלום",
+                    "placeholder": "הכנס פרטי תשלום",
+                    "description": "מידע נוסף לתשלום (לדוגמה, IBAN, הוראות, וכו')"
+                }
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "create": "צור חשבונית",
+                "save": "שמור שינויים"
+            }
+        },
+        "view": {
+            "title": "חשבונית {{number}}",
+            "description": "צפה בכל פרטי חשבונית זו.",
+            "status": {
+                "sent": "נשלח",
+                "unpaid": "לא שולם",
+                "overdue": "באיחור",
+                "paid": "שולם"
+            },
+            "fields": {
+                "number": "מספר חשבונית",
+                "title": "כותרת",
+                "status": "סטטוס",
+                "createdAt": "נוצר",
+                "dueDate": "תאריך פירעון",
+                "paidAt": "שולם בתאריך",
+                "updatedAt": "עודכן",
+                "client": "לקוח",
+                "paymentMethod": "אמצעי תשלום",
+                "discountRate": "שיעור הנחה",
+                "discountAmount": "סכום הנחה",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalVAT": "סכום מע\"מ",
+                "totalTTC": "סה\"כ (כולל מע\"מ)",
+                "notes": "הערות"
+            }
+        },
+        "delete": {
+            "title": "מחק חשבונית",
+            "description": "האם אתה בטוח שברצונך למחוק חשבונית זו? פעולה זו אינה ניתנת לביטול.",
+            "actions": {
+                "cancel": "ביטול",
+                "delete": "מחק חשבונית"
+            }
+        },
+        "pdf": {
+            "title": "חשבונית {{number}} - PDF"
+        }
+    },
+    "recurringInvoices": {
+        "frequency": {
+            "weekly": "כל שבוע",
+            "biweekly": "כל שבועיים",
+            "monthly": "כל חודש",
+            "bimonthly": "כל חודשיים",
+            "quarterly": "כל 3 חודשים",
+            "quadmonthly": "כל 4 חודשים",
+            "semiannually": "כל 6 חודשים",
+            "annually": "כל שנה"
+        },
+        "list": {
+            "title": "חשבוניות חוזרות",
+            "description": "נהל את החשבוניות החוזרות שלך ואוטומציה של החיוב.",
+            "actions": {
+                "addNew": "הוסף חשבונית חוזרת חדשה"
+            },
+            "item": {
+                "client": "לקוח",
+                "payment": "אמצעי תשלום",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalTTC": "סה\"כ (כולל מע\"מ)"
+            },
+            "tooltips": {
+                "view": "צפה בפרטים",
+                "edit": "ערוך",
+                "delete": "מחק"
+            },
+            "messages": {
+                "manual_process_success": "התהליך הידני הופעל בהצלחה",
+                "manual_process_error": "שגיאה בהפעלת התהליך הידני"
+            }
+        },
+        "emptyState": {
+            "noInvoices": "אין חשבוניות חוזרות עדיין",
+            "startAdding": "התחל בכך שתיצור את החשבונית החוזרת הראשונה שלך."
+        },
+        "actions": {
+            "addNew": "הוסף חשבונית חוזרת חדשה"
+        },
+        "upsert": {
+            "title": {
+                "create": "צור חשבונית חוזרת חדשה",
+                "edit": "ערוך חשבונית חוזרת"
+            },
+            "form": {
+                "quote": {
+                    "label": "מהצעת מחיר",
+                    "placeholder": "בחר הצעת מחיר"
+                },
+                "client": {
+                    "label": "לקוח",
+                    "placeholder": "בחר לקוח",
+                    "errors": {
+                        "required": "נא לבחור לקוח"
+                    },
+                    "noOptions": "אין לקוחות זמינים. נא לצור לקוח תחילה."
+                },
+                "currency": {
+                    "label": "מטבע"
+                },
+                "notes": {
+                    "label": "הערות",
+                    "placeholder": "הערות או תנאים נוספים"
+                },
+                "paymentMethod": {
+                    "label": "אמצעי תשלום",
+                    "placeholder": "בחר אמצעי תשלום",
+                    "description": "אמצעי התשלום המועדף עבור חשבונית חוזרת זו (לדוגמה, העברה בנקאית, צ'ק, וכו')"
+                },
+                "paymentDetails": {
+                    "label": "פרטי תשלום",
+                    "placeholder": "הכנס פרטי תשלום",
+                    "description": "מידע נוסף לתשלום (לדוגמה, IBAN, הוראות, וכו')"
+                },
+                "frequency": {
+                    "label": "תדירות",
+                    "placeholder": "בחר תדירות",
+                    "description": "באיזו תדירות ייווצרו חשבוניות",
+                    "errors": {
+                        "required": "תדירות היא שדה חובה"
+                    }
+                },
+                "count": {
+                    "label": "מספר פעמים",
+                    "placeholder": "הכנס מספר פעמים",
+                    "description": "המספר הכולל של פעמים שהחשבונית תיווצר (השאר ריק לחזרה אינסופית)"
+                },
+                "until": {
+                    "label": "תאריך סיום",
+                    "placeholder": "בחר תאריך סיום",
+                    "description": "תאריך בו החשבונית החוזרת תפסיק להיווצר (השאר ריק לחזרה אינסופית)"
+                },
+                "autoSend": {
+                    "label": "שליחה אוטומטית",
+                    "description": "שלח אוטומטית את החשבונית החוזרת ללקוח בעת יצירתה"
+                },
+                "items": {
+                    "label": "פריטי חשבונית חוזרת",
+                    "addItem": "הוסף פריט",
+                    "description": {
+                        "placeholder": "תיאור פריט",
+                        "errors": {
+                            "required": "תיאור הוא שדה חובה"
+                        }
+                    },
+                    "quantity": {
+                        "placeholder": "כמות",
+                        "unit": "יח'",
+                        "errors": {
+                            "required": "כמות היא שדה חובה",
+                            "min": "הכמות חייבת להיות לפחות 1",
+                            "invalid": "כמות לא תקינה"
+                        }
+                    },
+                    "unitPrice": {
+                        "placeholder": "מחיר ליחידה",
+                        "errors": {
+                            "required": "מחיר ליחידה הוא שדה חובה",
+                            "min": "מחיר ליחידה חייב להיות חיובי",
+                            "invalid": "מחיר ליחידה לא תקין"
+                        }
+                    },
+                    "vatRate": {
+                        "placeholder": "מע\"מ %",
+                        "errors": {
+                            "required": "שיעור המע\"מ הוא שדה חובה",
+                            "min": "שיעור המע\"מ חייב להיות חיובי"
+                        }
+                    },
+                    "type": {
+                        "label": "סוג",
+                        "hour": "שעה",
+                        "day": "יום",
+                        "deposit": "מקדמה/תשלום ראשוני",
+                        "service": "שירות",
+                        "product": "מוצר"
+                    }
+                }
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "create": "צור חשבונית חוזרת",
+                "save": "שמור שינויים"
+            }
+        }
+    },
+    "dashboard": {
+        "title": "לוח בקרה",
+        "welcomeMessage": "ברוך שובך, {{firstname}}!",
+        "revenue": {
+            "title": "סקירת הכנסות",
+            "description": "עקוב אחר הביצועים הפיננסיים שלך לאורך זמן",
+            "thisMonth": "החודש",
+            "thisYear": "השנה",
+            "chartLabel": "הכנסות"
+        },
+        "quotes": {
+            "title": "סקירת הצעות מחיר",
+            "description": "עקוב אחר צנרת הצעות המחיר ושיעורי ההמרה שלך",
+            "stats": {
+                "total": "סה\"כ הצעות מחיר",
+                "draft": "טיוטה",
+                "sent": "נשלח",
+                "signed": "חתום",
+                "expired": "פג תוקף"
+            },
+            "latestTitle": "הצעות מחיר אחרונות",
+            "noRecent": "אין הצעות מחיר אחרונות"
+        },
+        "invoices": {
+            "title": "סקירת חשבוניות",
+            "description": "עקוב אחר החיובים והתשלומים שלך",
+            "stats": {
+                "total": "סה\"כ חשבוניות",
+                "unpaid": "לא שולם",
+                "sent": "נשלח",
+                "paid": "שולם",
+                "overdue": "באיחור"
+            },
+            "latestTitle": "חשבוניות אחרונות",
+            "noRecent": "אין חשבוניות אחרונות"
+        },
+        "clients": {
+            "title": "סקירת לקוחות",
+            "stats": {
+                "total": "סה\"כ לקוחות"
+            }
+        }
+    },
+    "paymentMethods": {
+        "title": "אמצעי תשלום",
+        "description": "נהל אמצעי תשלום לשימוש חוזר.",
+        "empty": "אין אמצעי תשלום עדיין.",
+        "actions": {
+            "cancel": "ביטול",
+            "add": "הוסף",
+            "save": "שמור",
+            "edit": "ערוך",
+            "delete": "מחק",
+            "deleting": "מוחק..."
+        },
+        "search": {
+            "placeholder": "חפש אמצעי תשלום..."
+        },
+        "list": {
+            "add": "הוסף אמצעי תשלום",
+            "empty": "לא נמצאו אמצעי תשלום"
+        },
+        "stats": {
+            "total": "סה\"כ אמצעי תשלום",
+            "active": "פעיל",
+            "inactive": "לא פעיל"
+        },
+        "fields": {
+            "name": {
+                "label": "שם",
+                "placeholder": "לדוגמה, העברה בנקאית (עסקי)"
+            },
+            "details": {
+                "label": "פרטים",
+                "placeholder": "IBAN / פרטים"
+            },
+            "type": {
+                "label": "סוג",
+                "bank_transfer": "העברה בנקאית",
+                "paypal": "PayPal",
+                "check": "צ'ק",
+                "cash": "מזומן",
+                "other": "אחר"
+            },
+            "status": {
+                "label": "סטטוס"
+            }
+        },
+        "upsert": {
+            "title": {
+                "create": "הוסף אמצעי תשלום",
+                "edit": "ערוך אמצעי תשלום"
+            },
+            "form": {
+                "name": {
+                    "label": "שם",
+                    "placeholder": "לדוגמה, העברה בנקאית (עסקי)"
+                },
+                "details": {
+                    "label": "פרטים",
+                    "placeholder": "IBAN / פרטים"
+                },
+                "type": {
+                    "label": "סוג",
+                    "bank_transfer": "העברה בנקאית",
+                    "paypal": "PayPal",
+                    "check": "צ'ק",
+                    "cash": "מזומן",
+                    "other": "אחר"
+                }
+            },
+            "messages": {
+                "nameRequired": "שם הוא שדה חובה",
+                "addSuccess": "אמצעי התשלום נוסף",
+                "addError": "הוספת אמצעי התשלום נכשלה",
+                "updateSuccess": "אמצעי התשלום עודכן",
+                "updateError": "עדכון אמצעי התשלום נכשל",
+                "deleteSuccess": "אמצעי התשלום נמחק",
+                "deleteError": "מחיקת אמצעי התשלום נכשלה"
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "add": "הוסף",
+                "save": "שמור",
+                "edit": "ערוך",
+                "delete": "מחק",
+                "deleting": "מוחק..."
+            }
+        },
+        "tooltips": {
+            "view": "צפה",
+            "edit": "ערוך",
+            "delete": "מחק"
+        },
+        "delete": {
+            "description": "האם אתה בטוח שברצונך למחוק את \"{{name}}\"? פעולה זו אינה ניתנת לביטול."
+        }
+    },
+    "settings": {
+        "title": "הגדרות",
+        "tabs": {
+            "company": "חברה",
+            "pdfTemplates": "תבניות PDF",
+            "emailTemplates": "תבניות דוא\"ל",
+            "account": "חשבון",
+            "logs": "יומני פעילות",
+            "invitations": "הזמנות",
+            "dangerZone": "אזור מסוכן",
+            "plugins": "תוספים",
+            "webhooks": "ווב-הוקים"
+        },
+        "invitations": {
+            "create": {
+                "title": "צור קוד הזמנה",
+                "description": "צור קוד הזמנה חדש להזמנת מישהו ליצור חשבון",
+                "expiresIn": "פג תוקף בעוד (ימים)",
+                "expiresPlaceholder": "השאר ריק ללא תפוגה",
+                "button": "צור קוד",
+                "creating": "יוצר..."
+            },
+            "list": {
+                "title": "קודי ההזמנה שלך",
+                "description": "נהל את קודי ההזמנה שיצרת",
+                "code": "קוד",
+                "status": "סטטוס",
+                "createdAt": "נוצר",
+                "expiresAt": "פג תוקף",
+                "usedBy": "שימש",
+                "actions": "פעולות",
+                "empty": "עדיין לא יצרת קודי הזמנה",
+                "noExpiry": "לעולם לא"
+            },
+            "status": {
+                "active": "פעיל",
+                "used": "שומש",
+                "expired": "פג תוקף"
+            },
+            "messages": {
+                "fetchError": "טעינת קודי ההזמנה נכשלה",
+                "createSuccess": "קוד ההזמנה נוצר בהצלחה",
+                "createError": "יצירת קוד ההזמנה נכשלה",
+                "deleteSuccess": "קוד ההזמנה נמחק",
+                "deleteError": "מחיקת קוד ההזמנה נכשלה",
+                "codeCopied": "הקוד הועתק ללוח"
+            }
+        },
+        "company": {
+            "title": "הגדרות חברה",
+            "description": "נהל את פרטי החברה ומידע עסקי",
+            "basicInfo": "מידע בסיסי",
+            "basicInfoDescription": "פרטים חיוניים על החברה שלך",
+            "address": {
+                "title": "פרטי כתובת",
+                "description": "המיקום הפיזי של החברה שלך"
+            },
+            "contact": {
+                "title": "פרטי קשר",
+                "description": "כיצד לקוחות יכולים ליצור קשר עם החברה שלך"
+            },
+            "numberFormats": {
+                "title": "פורמטי מספרים",
+                "description": "התאם אישית את פורמטי המספרים עבור הצעות מחיר וחשבוניות"
+            },
+            "other": {
+                "title": "הגדרות נוספות",
+                "description": "הגדרות נוספות עבור החברה שלך"
+            },
+            "form": {
+                "company": {
+                    "label": "שם חברה",
+                    "placeholder": "הכנס את שם החברה שלך",
+                    "description": "השם המשפטי של העסק שלך",
+                    "errors": {
+                        "required": "שם חברה הוא שדה חובה",
+                        "empty": "שם חברה לא יכול להיות ריק",
+                        "maxLength": "שם חברה חייב להיות פחות מ-100 תווים"
+                    }
+                },
+                "description": {
+                    "label": "תיאור",
+                    "placeholder": "תיאור קצר של החברה שלך",
+                    "description": "תיאור קצר של פעילויות העסק שלך",
+                    "errors": {
+                        "maxLength": "התיאור חייב להיות פחות מ-500 תווים"
+                    }
+                },
+                "legalId": {
+                    "label": "מספר עוסק",
+                    "placeholder": "הכנס מספר עוסק",
+                    "description": "מספר הרישום המשפטי של החברה שלך",
+                    "errors": {
+                        "required": "מספר עוסק הוא שדה חובה",
+                        "empty": "מספר עוסק לא יכול להיות ריק",
+                        "maxLength": "מספר עוסק חייב להיות פחות מ-50 תווים"
+                    }
+                },
+                "vat": {
+                    "label": "מספר מע\"מ",
+                    "placeholder": "הכנס מספר מע\"מ (לדוגמה, FR12345678901)",
+                    "description": "מספר זיהוי המע\"מ של החברה שלך",
+                    "errors": {
+                        "required": "מספר מע\"מ הוא שדה חובה",
+                        "empty": "מספר מע\"מ לא יכול להיות ריק",
+                        "maxLength": "מספר מע\"מ חייב להיות פחות מ-15 תווים",
+                        "format": "פורמט מספר מע\"מ אינו תקין (לדוגמה, FR12345678901)"
+                    }
+                },
+                "foundedAt": {
+                    "label": "תאריך ייסוד",
+                    "placeholder": "בחר תאריך ייסוד",
+                    "description": "מתי החברה שלך הוקמה",
+                    "errors": {
+                        "future": "תאריך ייסוד לא יכול להיות בעתיד"
+                    }
+                },
+                "currency": {
+                    "label": "מטבע",
+                    "description": "מטבע ברירת המחדל לחשבוניות והצעות מחיר",
+                    "errors": {
+                        "required": "מטבע הוא שדה חובה",
+                        "select": "נא לבחור מטבע"
+                    }
+                },
+                "address": {
+                    "label": "כתובת",
+                    "placeholder": "הכנס כתובת רחוב",
+                    "description": "כתובת הרחוב של החברה שלך",
+                    "errors": {
+                        "empty": "כתובת היא שדה חובה"
+                    }
+                },
+                "addressLine2": {
+                    "label": "שורת כתובת 2 (אופציונלי)",
+                    "placeholder": "דירה, חדר, יחידה, בניין, קומה, וכו'.",
+                    "description": "מידע כתובת נוסף (אופציונלי)"
+                },
+                "postalCode": {
+                    "label": "מיקוד",
+                    "placeholder": "הכנס מיקוד",
+                    "errors": {
+                        "format": "פורמט המיקוד אינו תקין"
+                    }
+                },
+                "city": {
+                    "label": "עיר",
+                    "placeholder": "הכנס עיר",
+                    "errors": {
+                        "empty": "עיר היא שדה חובה"
+                    }
+                },
+                "state": {
+                    "label": "מדינה/פרובינציה (אופציונלי)",
+                    "placeholder": "הכנס מדינה או פרובינציה",
+                    "description": "מדינה או פרובינציה (לדוגמה, CA, TX, Ontario)"
+                },
+                "country": {
+                    "label": "מדינה",
+                    "placeholder": "הכנס מדינה",
+                    "errors": {
+                        "empty": "מדינה היא שדה חובה"
+                    }
+                },
+                "phone": {
+                    "label": "טלפון",
+                    "placeholder": "הכנס מספר טלפון",
+                    "description": "מספר הטלפון הראשי של החברה שלך",
+                    "errors": {
+                        "minLength": "מספר הטלפון חייב להיות לפחות 8 תווים",
+                        "format": "פורמט מספר הטלפון אינו תקין"
+                    }
+                },
+                "email": {
+                    "label": "דוא\"ל",
+                    "placeholder": "הכנס כתובת דוא\"ל",
+                    "description": "כתובת הדוא\"ל הראשית של החברה שלך",
+                    "errors": {
+                        "required": "דוא\"ל הוא שדה חובה",
+                        "format": "פורמט הדוא\"ל אינו תקין"
+                    }
+                },
+                "quoteStartingNumber": {
+                    "label": "מספר התחלה של הצעת מחיר",
+                    "placeholder": "הכנס מספר התחלה עבור הצעות מחיר",
+                    "description": "מספר ראשוני למספור הצעות מחיר",
+                    "errors": {
+                        "min": "מספר התחלה של הצעת מחיר חייב להיות לפחות 1"
+                    }
+                },
+                "quoteNumberFormat": {
+                    "label": "פורמט מספר הצעת מחיר",
+                    "placeholder": "הכנס פורמט מספר הצעת מחיר (לדוגמה, Q-{year}-{number})",
+                    "description": "פורמט עבור מספרי הצעות מחיר",
+                    "errors": {
+                        "required": "פורמט מספר הצעת מחיר הוא שדה חובה",
+                        "maxLength": "פורמט מספר הצעת מחיר חייב להיות פחות מ-100 תווים",
+                        "format": "פורמט מספר הצעת מחיר אינו תקין. השתמש ב-{year}, {month}, {day}, {number} עם ריפוד אופציונלי (לדוגמה, {number:4})"
+                    }
+                },
+                "invoiceStartingNumber": {
+                    "label": "מספר התחלה של חשבונית",
+                    "placeholder": "הכנס מספר התחלה עבור חשבוניות",
+                    "description": "מספר ראשוני למספור חשבוניות",
+                    "errors": {
+                        "min": "מספר התחלה של חשבונית חייב להיות לפחות 1"
+                    }
+                },
+                "invoiceNumberFormat": {
+                    "label": "פורמט מספר חשבונית",
+                    "placeholder": "הכנס פורמט מספר חשבונית (לדוגמה, INV-{year}-{number})",
+                    "description": "פורמט עבור מספרי חשבוניות",
+                    "errors": {
+                        "required": "פורמט מספר חשבונית הוא שדה חובה",
+                        "maxLength": "פורמט מספר חשבונית חייב להיות פחות מ-100 תווים",
+                        "format": "פורמט מספר חשבונית אינו תקין. השתמש ב-{year}, {month}, {day}, {number} עם ריפוד אופציונלי (לדוגמה, {number:4})"
+                    }
+                },
+                "receiptStartingNumber": {
+                    "label": "מספר התחלה של קבלה",
+                    "placeholder": "הכנס מספר התחלה עבור קבלות",
+                    "description": "מספר ראשוני למספור קבלות",
+                    "errors": {
+                        "min": "מספר התחלה של קבלה חייב להיות לפחות 1"
+                    }
+                },
+                "receiptNumberFormat": {
+                    "label": "פורמט מספר קבלה",
+                    "placeholder": "הכנס פורמט מספר קבלה (לדוגמה, REC-{year}-{number})",
+                    "description": "פורמט עבור מספרי קבלות",
+                    "errors": {
+                        "required": "פורמט מספר קבלה הוא שדה חובה",
+                        "maxLength": "פורמט מספר קבלה חייב להיות פחות מ-100 תווים",
+                        "format": "פורמט מספר קבלה אינו תקין. השתמש ב-{year}, {month}, {day}, {number} עם ריפוד אופציונלי (לדוגמה, {number:4})"
+                    }
+                },
+                "invoicePDFFormat": {
+                    "label": "פורמט PDF של חשבונית",
+                    "placeholder": "בחר פורמט PDF של חשבונית",
+                    "description": "בחר את הפורמט עבור קובצי PDF של חשבוניות שיישלחו ללקוחות",
+                    "options": {
+                        "pdf": "PDF רגיל",
+                        "facturx": "Factur-X",
+                        "zugferd": "ZUGFeRD",
+                        "xrechnung": "XRechnung",
+                        "ubl": "UBL",
+                        "cii": "CII"
+                    },
+                    "errors": {
+                        "required": "פורמט PDF של חשבונית הוא שדה חובה"
+                    }
+                },
+                "dateFormat": {
+                    "label": "פורמט תאריך",
+                    "placeholder": "בחר פורמט תאריך",
+                    "description": "בחר כיצד תאריכים יוצגו בהצעות מחיר ובחשבוניות",
+                    "errors": {
+                        "required": "פורמט תאריך הוא שדה חובה"
+                    }
+                },
+                "exemptVat": {
+                    "label": "מע\"מ לא ישים",
+                    "description": "הצג את ההודעה המשפטית 'מע\"מ לא ישים, סעיף 293 ב' של CGI' במסמכים עתידיים כאשר מופעל ואם מדינת החברה היא צרפת."
+                },
+                "saving": "שומר...",
+                "saveSettings": "שמור הגדרות"
+            },
+            "messages": {
+                "updateSuccess": "הגדרות החברה עודכנו בהצלחה",
+                "updateError": "עדכון הגדרות החברה נכשל"
+            }
+        },
+        "account": {
+            "title": "הגדרות חשבון",
+            "description": "נהל את פרטי החשבון האישי שלך ואבטחה",
+            "profile": {
+                "title": "פרטי פרופיל",
+                "description": "עדכן את הפרטים האישיים שלך"
+            },
+            "password": {
+                "title": "ססמה ואבטחה",
+                "description": "שנה את הססמה ואת הגדרות האבטחה שלך",
+                "loading": "טוען...",
+                "noPasswordSet": "התחברת עם ספק חיצוני (OIDC). ניתן להגדיר ססמה כדי להתחבר גם עם דוא\"ל וססמה."
+            },
+            "form": {
+                "firstname": {
+                    "label": "שם פרטי",
+                    "placeholder": "הכנס את שמך הפרטי",
+                    "errors": {
+                        "required": "שם פרטי הוא שדה חובה"
+                    }
+                },
+                "lastname": {
+                    "label": "שם משפחה",
+                    "placeholder": "הכנס את שם המשפחה שלך",
+                    "errors": {
+                        "required": "שם משפחה הוא שדה חובה"
+                    }
+                },
+                "email": {
+                    "label": "דוא\"ל",
+                    "placeholder": "הכנס את הדוא\"ל שלך",
+                    "errors": {
+                        "invalid": "פורמט הדוא\"ל אינו תקין"
+                    }
+                },
+                "currentPassword": {
+                    "label": "ססמה נוכחית",
+                    "placeholder": "הכנס ססמה נוכחית",
+                    "errors": {
+                        "required": "ססמה נוכחית היא שדה חובה"
+                    }
+                },
+                "password": {
+                    "label": "ססמה חדשה",
+                    "labelNew": "ססמה",
+                    "placeholder": "הכנס ססמה חדשה",
+                    "errors": {
+                        "minLength": "הססמה חייבת להיות לפחות 8 תווים",
+                        "letter": "הססמה חייבת להכיל לפחות אות אחת",
+                        "number": "הססמה חייבת להכיל לפחות ספרה אחת",
+                        "special": "הססמה חייבת להכיל לפחות תו מיוחד אחד"
+                    }
+                },
+                "confirmPassword": {
+                    "label": "אשר ססמה",
+                    "placeholder": "אשר ססמה חדשה",
+                    "errors": {
+                        "match": "הססמאות אינן תואמות"
+                    }
+                },
+                "errors": {
+                    "fieldsEmpty": "כל השדות הם שדות חובה"
+                },
+                "updatingProfile": "מעדכן...",
+                "updateProfile": "עדכן פרופיל",
+                "updatingPassword": "מעדכן...",
+                "updatePassword": "עדכן ססמה",
+                "setPassword": "הגדר ססמה"
+            },
+            "messages": {
+                "profileUpdateSuccess": "הפרופיל עודכן בהצלחה",
+                "profileUpdateError": "עדכון הפרופיל נכשל",
+                "passwordUpdateSuccess": "הססמה עודכנה בהצלחה",
+                "passwordUpdateError": "עדכון הססמה נכשל"
+            }
+        },
+        "dangerZone": {
+            "title": "אזור מסוכן",
+            "description": "פעולות בלתי הפיכות והרסניות",
+            "resetApp": {
+                "title": "אפס נתוני אפליקציה",
+                "description": "הסר את כל הצעות המחיר, החשבוניות והלקוחות אך שמור את חשבונך",
+                "button": "אפס נתוני אפליקציה"
+            },
+            "resetDatabase": {
+                "title": "אפס הכל",
+                "description": "מחק לצמיתות את חשבונך וכל הנתונים הקשורים אליו",
+                "button": "אפס מסד נתונים"
+            },
+            "modal": {
+                "title": "אשר פעולה מסוכנת",
+                "description": "נא להכנס את קוד האימות שנשלח לדוא\"ל שלך לאישור פעולה זו.",
+                "otpLabel": "קוד אימות",
+                "otpPlaceholder": "0000-0000",
+                "warningApp": "פעולה זו תאפס את כל נתוני האפליקציה שלך",
+                "warningAppDescription": "כל הצעות המחיר, החשבוניות והלקוחות יימחקו לצמיתות",
+                "warningDatabase": "פעולה זו תמחק את חשבונך כולו",
+                "warningDatabaseDescription": "חשבונך וכל הנתונים יימחקו לצמיתות",
+                "cancel": "ביטול",
+                "confirm": "אשר פעולה"
+            },
+            "messages": {
+                "otpSentSuccess": "קוד האימות נשלח לדוא\"ל שלך",
+                "otpSentError": "שליחת קוד האימות נכשלה",
+                "actionSuccess": "הפעולה הושלמה בהצלחה",
+                "actionError": "השלמת הפעולה נכשלה",
+                "actionFailed": "הפעולה נכשלה",
+                "unexpectedError": "אירעה שגיאה בלתי צפויה"
+            }
+        },
+        "plugins": {
+            "title": "תוספים ({{count}})",
+            "description": "התקן ונהל תוספים להרחבת פונקציונליות האפליקציה",
+            "add": {
+                "title": "הוסף תוסף",
+                "description": "התקן תוסף ממאגר Git",
+                "gitUrl": {
+                    "label": "כתובת URL של מאגר Git",
+                    "placeholder": "https://github.com/username/repo"
+                }
+            },
+            "actions": {
+                "add": "הוסף",
+                "addLoading": "מוסיף...",
+                "delete": "מחק",
+                "deleting": "מוחק..."
+            },
+            "emptyState": {
+                "noPlugins": "אין תוספים מותקנים. הוסף תוסף להרחבת הפונקציונליות."
+            },
+            "messages": {
+                "addSuccess": "התוסף נוסף בהצלחה",
+                "addError": "הוספת התוסף נכשלה",
+                "deleteSuccess": "התוסף נמחק בהצלחה",
+                "deleteError": "מחיקת התוסף נכשלה",
+                "toggleSuccess": "מצב התוסף שונה בהצלחה",
+                "toggleError": "שינוי מצב התוסף נכשל",
+                "configureSuccess": "התוסף הוגדר בהצלחה",
+                "configureError": "הגדרת התוסף נכשלה"
+            },
+            "webhook": {
+                "secretPlaceholder": "אשר את החלון הקופץ ליצירת סוד מאובטח"
+            }
+        },
+        "pdfTemplates": {
+            "title": "תבניות PDF",
+            "description": "התאם אישית את המראה של החשבוניות והצעות המחיר שלך",
+            "templateType": {
+                "title": "סוג תבנית",
+                "description": "בחר איזו תבנית להתאים אישית",
+                "label": "סוג תבנית",
+                "options": {
+                    "invoice": "תבנית חשבונית",
+                    "quote": "תבנית הצעת מחיר",
+                    "receipt": "תבנית קבלה"
+                }
+            },
+            "typography": {
+                "title": "טיפוגרפיה",
+                "description": "אפשרויות גופן ועיצוב טקסט",
+                "fontFamily": "סוג גופן"
+            },
+            "colors": {
+                "title": "צבעים",
+                "description": "צבעי מותג וערכת נושא",
+                "primaryColor": "צבע ראשי",
+                "secondaryColor": "צבע משני"
+            },
+            "logo": {
+                "title": "לוגו",
+                "description": "הגדרות לוגו חברה",
+                "includeLogo": "כלול לוגו",
+                "logoPreview": "תצוגה מקדימה של לוגו",
+                "uploadText": "לחץ להעלאת לוגו"
+            },
+            "spacing": {
+                "title": "ריווח ופריסה",
+                "description": "שלוט בריווח ובשוליים",
+                "padding": "ריפוד"
+            },
+            "labels": {
+                "title": "תוויות וטקסט",
+                "invoice": "חשבונית",
+                "quote": "הצעת מחיר",
+                "receipt": "קבלה",
+                "billTo": "חיוב ל",
+                "quoteFor": "הצעת מחיר עבור",
+                "validUntil": "בתוקף עד",
+                "dueDate": "תאריך פירעון",
+                "paymentDate": "תאריך תשלום",
+                "date": "תאריך",
+                "description": "תיאור",
+                "receivedFrom": "התקבל מ",
+                "invoiceRefer": "הפניה לחשבונית",
+                "quantity": "כמות",
+                "unitPrice": "מחיר ליחידה",
+                "total": "סה\"כ",
+                "subtotal": "סכום ביניים",
+                "discount": "הנחה",
+                "vat": "מע\"מ",
+                "grandTotal": "סה\"כ כולל",
+                "vatRate": "שיעור מע\"מ",
+                "paymentMethod": "אמצעי תשלום",
+                "paymentDetails": "פרטי תשלום",
+                "paymentMethodVariants": "שמות תצוגה של אמצעי תשלום",
+                "paymentMethodBankTransfer": "העברה בנקאית",
+                "paymentMethodPayPal": "PayPal",
+                "paymentMethodCash": "מזומן",
+                "paymentMethodCheck": "צ'ק",
+                "paymentMethodOther": "אחר",
+                "notes": "הערות",
+                "totalReceived": "סה\"כ התקבל",
+                "hour": "שעה",
+                "day": "יום",
+                "deposit": "מקדמה",
+                "service": "שירות",
+                "product": "מוצר",
+                "type": "סוג",
+                "legalId": "מספר עוסק",
+                "vatId": "מספר מע\"מ"
+            },
+            "defaultLabels": {
+                "invoice": "חשבונית",
+                "quote": "הצעת מחיר",
+                "receipt": "קבלה",
+                "billTo": "חיוב ל",
+                "quoteFor": "הצעת מחיר עבור",
+                "validUntil": "בתוקף עד",
+                "date": "תאריך",
+                "dueDate": "תאריך פירעון",
+                "paymentDate": "תאריך תשלום",
+                "description": "תיאור",
+                "receivedFrom": "התקבל מ",
+                "invoiceRefer": "הפניה לחשבונית",
+                "quantity": "כמות",
+                "unitPrice": "מחיר ליחידה",
+                "total": "סה\"כ",
+                "subtotal": "סכום ביניים",
+                "discount": "הנחה",
+                "vat": "מע\"מ",
+                "grandTotal": "סה\"כ כולל",
+                "vatRate": "שיעור מע\"מ",
+                "paymentMethod": "אמצעי תשלום",
+                "paymentDetails": "פרטי תשלום",
+                "paymentMethodBankTransfer": "העברה בנקאית",
+                "paymentMethodPayPal": "PayPal",
+                "paymentMethodCash": "מזומן",
+                "paymentMethodCheck": "צ'ק",
+                "paymentMethodOther": "אחר",
+                "notes": "הערות",
+                "totalReceived": "סה\"כ התקבל",
+                "hour": "שעה",
+                "day": "יום",
+                "deposit": "מקדמה",
+                "service": "שירות",
+                "product": "מוצר",
+                "type": "סוג",
+                "legalId": "מספר עוסק",
+                "vatId": "מספר מע\"מ"
+            },
+            "preview": {
+                "title": "תצוגה מקדימה",
+                "description": "תצוגה מקדימה חיה של תבנית ה-{{templateType}} שלך",
+                "iframeTitle": "תצוגה מקדימה של תבנית"
+            },
+            "saveButton": "שמור הגדרות תבנית",
+            "messages": {
+                "updateSuccess": "הגדרות התבנית עודכנו בהצלחה",
+                "updateError": "עדכון הגדרות התבנית נכשל"
+            }
+        },
+        "emailTemplates": {
+            "title": "תבניות דוא\"ל",
+            "description": "התאם אישית תבניות דוא\"ל עבור חשבוניות והצעות מחיר",
+            "editor": {
+                "subject": "נושא",
+                "subjectPlaceholder": "הכנס נושא דוא\"ל",
+                "body": "גוף הדוא\"ל",
+                "htmlPlaceholder": "הכנס תוכן HTML...",
+                "htmlTip": "ניתן להשתמש בתגיות HTML לעיצוב",
+                "availableVariables": "משתנים זמינים",
+                "variablesTip": "השתמש במשתנים אלה בתבנית שלך על ידי עטיפתם בסוגריים מסולסלים כפולים"
+            },
+            "preview": {
+                "from": "מ",
+                "to": "אל",
+                "subject": "נושא",
+                "reply": "השב",
+                "forward": "העבר",
+                "archive": "ארכיון"
+            },
+            "saveButton": "שמור תבנית",
+            "messages": {
+                "saveSuccess": "תבנית {{name}} נשמרה בהצלחה",
+                "saveError": "שמירת התבנית נכשלה"
+            }
+        },
+        "webhooks": {
+            "title": "הגדרות ווב-הוק",
+            "description": "נהל ווב-הוקים יוצאים עבור אירועים באפליקציה שלך",
+            "create": {
+                "title": "צור ווב-הוק",
+                "description": "צור ווב-הוק חדש לקבלת אירועים",
+                "url": "כתובת URL של ווב-הוק",
+                "type": "סוג",
+                "events": "אירועים",
+                "button": "צור ווב-הוק"
+            },
+            "card": {
+                "events": "מאזין לאירועים: {{events}}",
+                "edit": "ערוך",
+                "delete": "מחק",
+                "editPrompt": "הכנס כתובת URL חדשה לווב-הוק"
+            }
+        }
+    },
+    "sidebar": {
+        "navigation": {
+            "dashboard": "לוח בקרה",
+            "quotes": "הצעות מחיר",
+            "invoices": "חשבוניות",
+            "receipts": "קבלות",
+            "clients": "לקוחות",
+            "paymentMethods": "אמצעי תשלום",
+            "stats": "סטטיסטיקות",
+            "settings": "הגדרות"
+        },
+        "company": {
+            "plan": "ארגוני"
+        },
+        "menu": "תפריט",
+        "theme": {
+            "toggleTheme": "שנה ערכת נושא",
+            "light": "בהיר",
+            "dark": "כהה",
+            "system": "מערכת"
+        },
+        "userMenu": {
+            "account": "חשבון",
+            "logout": "התנתק"
+        },
+        "companyDialog": {
+            "title": "השלם הגדרת חברה",
+            "description": "נא למלא את פרטי החברה שלך כדי להמשיך להשתמש באפליקציה.",
+            "goButton": "עבור להגדרות חברה"
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "התחבר",
+            "description": "הכנס את פרטי ההתחברות שלך לגישה לחשבונך",
+            "form": {
+                "email": {
+                    "label": "דוא\"ל"
+                },
+                "password": {
+                    "label": "ססמה"
+                },
+                "loggingIn": "מתחבר...",
+                "loginButton": "התחבר"
+            },
+            "noAccount": "אין לך חשבון?",
+            "signUpLink": "הרשמה",
+            "errors": {
+                "invalidEmail": "נא להכנס כתובת דוא\"ל תקינה",
+                "passwordRequired": "ססמה היא שדה חובה"
+            },
+            "messages": {
+                "loginSuccess": "התחברת בהצלחה",
+                "loginError": "פרטי ההתחברות שגויים"
+            },
+            "oidc": "התחבר עם OIDC.",
+            "oidcLink": "כניסה עם OIDC"
+        },
+        "signup": {
+            "title": "צור חשבון",
+            "description": "צור חשבון חדש כדי להתחיל",
+            "form": {
+                "firstname": {
+                    "label": "שם פרטי",
+                    "placeholder": "הכנס את שמך הפרטי"
+                },
+                "lastname": {
+                    "label": "שם משפחה",
+                    "placeholder": "הכנס את שם המשפחה שלך"
+                },
+                "email": {
+                    "label": "דוא\"ל",
+                    "placeholder": "הכנס את הדוא\"ל שלך"
+                },
+                "password": {
+                    "label": "ססמה",
+                    "placeholder": "צור ססמה",
+                    "requirements": "דרישות ססמה:"
+                },
+                "invitationCode": {
+                    "label": "קוד הזמנה",
+                    "placeholder": "הכנס את קוד ההזמנה שלך",
+                    "hint": "דרוש קוד הזמנה ממשתמש קיים להרשמה"
+                },
+                "creatingAccount": "יוצר חשבון...",
+                "createButton": "צור חשבון"
+            },
+            "hasAccount": "כבר יש לך חשבון?",
+            "signInLink": "התחבר",
+            "errors": {
+                "firstnameMinLength": "השם הפרטי חייב להיות לפחות 2 תווים",
+                "lastnameMinLength": "שם המשפחה חייב להיות לפחות 2 תווים",
+                "invalidEmail": "נא להכנס כתובת דוא\"ל תקינה",
+                "passwordMinLength": "הססמה חייבת להיות לפחות 8 תווים",
+                "passwordLetter": "הססמה חייבת להכיל לפחות אות אחת",
+                "passwordNumber": "הססמה חייבת להכיל לפחות ספרה אחת",
+                "passwordSpecial": "הססמה חייבת להכיל לפחות תו מיוחד אחד",
+                "invitationCodeRequired": "קוד הזמנה נדרש להרשמה",
+                "invalidInvitationCode": "קוד הזמנה לא תקין או שפג תוקפו",
+                "genericError": "אירעה שגיאה בעת יצירת חשבונך"
+            },
+            "messages": {
+                "accountCreated": "החשבון נוצר בהצלחה"
+            },
+            "oidc": "הרשם עם OIDC.",
+            "oidcLink": "הרשמה עם OIDC"
+        }
+    },
+    "unavailable": {
+        "title": "לא זמין בנייד/טאבלט",
+        "description": "תכונה זו זמינה רק במחשבים שולחניים לחוויה מיטבית."
+    },
+    "component": {
+        "currency-select": {
+            "placeholder": "בחר את המטבע שלך",
+            "searchPlaceholder": "חפש מטבעות...",
+            "noResults": "לא נמצאו מטבעות"
+        }
+    },
+    "common": {
+        "previous": "הקודם",
+        "next": "הבא",
+        "loading": "טוען...",
+        "finish": "סיים",
+        "units": {
+            "day": "יום",
+            "week": "שבוע",
+            "month": "חודש",
+            "year": "שנה"
+        },
+        "valueWithCurrency": "{{amount}}{{currency}}"
+    },
+    "noOptions": "אין אפשרויות זמינות. צור לקוח חדש.",
+    "receipts": {
+        "header": {
+            "subtitle": "ניהול קבלות",
+            "count": "{{count}} קבלות {{found}}",
+            "found": "נמצאו"
+        },
+        "search": {
+            "placeholder": "חפש קבלות..."
+        },
+        "actions": {
+            "addNew": "הוסף קבלה חדשה"
+        },
+        "stats": {
+            "total": "סה\"כ קבלות",
+            "draft": "טיוטה",
+            "sent": "נשלח",
+            "signed": "חתום"
+        },
+        "emptyState": {
+            "noReceipts": "אין קבלות עדיין",
+            "noResults": "לא נמצאו קבלות",
+            "startAdding": "התחל בכך שתיצור את הקבלה הראשונה שלך.",
+            "tryDifferentSearch": "נסה לשנות את מונחי החיפוש."
+        },
+        "list": {
+            "title": "כל הקבלות",
+            "description": "נהל וצפה בכל הקבלות שלך במקום אחד.",
+            "status": {
+                "draft": "טיוטה",
+                "sent": "נשלח",
+                "signed": "חתום"
+            },
+            "item": {
+                "title": "קבלה {{number}}",
+                "client": "לקוח",
+                "issued": "הונפק",
+                "validUntil": "בתוקף עד",
+                "totalHT": "סה\"כ (לפני מע\"מ)",
+                "totalTTC": "סה\"כ (כולל מע\"מ)",
+                "invoice": "חשבונית",
+                "totalItemCount": "סה\"כ מספר פריטים",
+                "totalPaid": "סה\"כ שולם"
+            },
+            "tooltips": {
+                "view": "צפה בקבלה",
+                "viewPdf": "צפה ב-PDF",
+                "downloadPdf": "הורד PDF",
+                "edit": "ערוך קבלה",
+                "sendToClient": "שלח ללקוח",
+                "delete": "מחק קבלה"
+            },
+            "messages": {
+                "emailSent": "הקבלה נשלחה ללקוח בהצלחה.",
+                "emailError": "שליחת הקבלה ללקוח נכשלה."
+            },
+            "actions": {
+                "addNew": "הוסף קבלה חדשה"
+            }
+        },
+        "upsert": {
+            "title": {
+                "edit": "ערוך קבלה",
+                "create": "צור קבלה"
+            },
+            "form": {
+                "client": {
+                    "label": "לקוח",
+                    "errors": {
+                        "required": "לקוח הוא שדה חובה."
+                    }
+                },
+                "items": {
+                    "label": "פריטים",
+                    "placeholder": "הוסף פריטים לקבלה",
+                    "noResults": "לא נמצאו פריטים",
+                    "addButton": "הוסף פריט",
+                    "description": {
+                        "errors": {
+                            "required": "תיאור הוא שדה חובה."
+                        }
+                    },
+                    "quantity": {
+                        "errors": {
+                            "required": "כמות היא שדה חובה.",
+                            "min": "הכמות חייבת להיות לפחות 1.",
+                            "invalid": "כמות לא תקינה."
+                        }
+                    },
+                    "unitPrice": {
+                        "errors": {
+                            "required": "מחיר ליחידה הוא שדה חובה.",
+                            "min": "מחיר ליחידה חייב להיות לפחות 0.",
+                            "invalid": "מחיר ליחידה לא תקין."
+                        }
+                    },
+                    "vatRate": {
+                        "errors": {
+                            "required": "שיעור המע\"מ הוא שדה חובה.",
+                            "min": "שיעור המע\"מ חייב להיות לפחות 0."
+                        }
+                    }
+                },
+                "invoice": {
+                    "label": "חשבונית",
+                    "placeholder": "בחר חשבונית",
+                    "noResults": "לא נמצאו חשבוניות"
+                },
+                "paymentMethod": {
+                    "label": "אמצעי תשלום",
+                    "placeholder": "הכנס את אמצעי התשלום",
+                    "description": "השיטה ששימשה לתשלום"
+                },
+                "paymentDetails": {
+                    "label": "פרטי תשלום",
+                    "placeholder": "הכנס פרטי תשלום",
+                    "description": "מידע נוסף על התשלום"
+                }
+            },
+            "actions": {
+                "cancel": "ביטול",
+                "save": "שמור שינויים",
+                "create": "צור קבלה",
+                "edit": "ערוך קבלה"
+            }
+        },
+        "delete": {
+            "title": "מחק קבלה",
+            "description": "האם אתה בטוח שברצונך למחוק קבלה זו? פעולה זו אינה ניתנת לביטול.",
+            "actions": {
+                "cancel": "ביטול",
+                "delete": "מחק"
+            }
+        },
+        "pdf": {
+            "title": "קבלה {{number}} - PDF"
+        }
+    },
+    "stats": {
+        "title": "סטטיסטיקות",
+        "description": "צפה בסכומים שחויבו, הכנסות ומקדמות לפי חודש ושנה.",
+        "noData": "אין נתונים זמינים עבור התקופה הנבחרת.",
+        "controls": {
+            "year": "שנה",
+            "range": "טווח שנים"
+        },
+        "monthly": {
+            "title": "סטטיסטיקות חודשיות"
+        },
+        "yearly": {
+            "title": "סטטיסטיקות שנתיות"
+        },
+        "month": "חודש",
+        "year": "שנה",
+        "invoiced": "חויב (כולל מע\"מ)",
+        "revenue": "הכנסות (לפני מע\"מ)",
+        "deposits": "מקדמות (חשבונית שולמה)"
+    },
+    "webhook": {
+        "instructions": {
+            "documenso": {
+                "title": "הוראות לתצורת ווב-הוק של Documenso:",
+                "step1": "1. עבור ללוח הניהול של Documenso שלך",
+                "step2": "2. הגדר את כתובת ה-URL של הווב-הוק",
+                "step3": "3. הגדר את הסוד של הווב-הוק",
+                "step4": "4. הפעל את האירועים הבאים: document.signed, document.completed (נדרשים כמינימום)",
+                "step5": "5. אירועים נוספים שאולי תרצה להפעיל: document.pending, document.completed, document.rejected"
+            }
+        },
+        "modal": {
+            "title": "תצורת ווב-הוק עבור {{pluginName}}",
+            "url": "כתובת URL של ווב-הוק",
+            "secret": "סוד ווב-הוק",
+            "secretDescription": "שמור את הסוד זה באופן מאובטח. הוא ישמש לאימות אותנטיות הווב-הוק.",
+            "instructions": "הוראות תצורה",
+            "warning": "הגדר גם את כתובת ה-URL של הווב-הוק וגם את הסוד בהגדרות {{pluginName}} שלך לקבלת עדכונים בזמן אמת מאומתים. שמור את הסוד באופן מאובטח - הוא לא יוצג שוב.",
+            "gotIt": "הבנתי!"
+        }
+    },
+    "folderSelect": {
+        "placeholder": "בחר תיקייה...",
+        "browse": "עיין",
+        "title": "בחר תיקייה",
+        "newFolder": "תיקייה חדשה",
+        "folderName": "שם תיקייה...",
+        "create": "צור",
+        "cancel": "ביטול",
+        "selectThisFolder": "בחר תיקייה זו",
+        "noSubdirectories": "לא נמצאו תת-תיקיות",
+        "loading": "טוען ספריות..."
     }
 }

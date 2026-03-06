@@ -77,14 +77,14 @@ function EmailPreview({ template }: { template: EmailTemplate }) {
 				<div className="border-b p-4">
 					<div className="flex items-center gap-2 mb-3">
 						<Mail className="h-5 w-5 text-blue-600" />
-						<span className="font-semibold text-gray-900">Invoicerr Mail</span>
+						<span className="font-semibold text-gray-900">חשבונית׳ו מייל</span>
 					</div>
 					<div className="space-y-2 text-sm">
 						<div className="flex gap-2 bg-gray-50 p-2 rounded">
 							<span className="font-medium text-gray-600">
 								{t("settings.emailTemplates.preview.from")}:
 							</span>
-							<span className="text-gray-900">noreply@invoicerr.dev</span>
+							<span className="text-gray-900">noreply@heshbonito.co.il</span>
 						</div>
 						<div className="flex gap-2 bg-gray-50 p-2 rounded">
 							<span className="font-medium text-gray-600">
