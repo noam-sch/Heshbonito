@@ -167,7 +167,7 @@ export const InvoiceList = forwardRef<InvoiceListHandle, InvoiceListProps>(
                 <Card className="gap-0">
                     <CardHeader className="border-b flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="flex items-center space-x-2">
+                            <CardTitle className="flex items-center gap-2">
                                 <ReceiptText className="h-5 w-5 " />
                                 <span>{title}</span>
                             </CardTitle>
@@ -175,7 +175,7 @@ export const InvoiceList = forwardRef<InvoiceListHandle, InvoiceListProps>(
                         </div>
                         {showCreateButton && (
                             <Button onClick={() => setCreateInvoiceDialog(true)}>
-                                <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                                <Plus className="h-4 w-4 me-0 md:me-2" />
                                 <span className="hidden md:inline-flex">{t("invoices.list.actions.addNew")}</span>
                             </Button>
                         )}

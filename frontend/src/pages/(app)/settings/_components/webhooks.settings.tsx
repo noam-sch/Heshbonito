@@ -109,7 +109,7 @@ export default function WebhooksSettings() {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4 pr-2 overflow-hidden">
+                <div className="lg:col-span-2 space-y-4 pe-2 overflow-hidden">
                     {webhooks?.map((wh) => (
                         <Card key={wh.id} className="w-full">
                             <CardHeader className="w-full">

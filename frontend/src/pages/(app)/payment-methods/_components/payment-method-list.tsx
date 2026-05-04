@@ -65,7 +65,7 @@ export const PaymentMethodsList = forwardRef<PaymentMethodsListHandle, PaymentMe
         <Card className="gap-0">
           <CardHeader className="border-b flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center gap-2">
                 <Banknote className="h-5 w-5 " />
                 <span>{title}</span>
               </CardTitle>
@@ -73,7 +73,7 @@ export const PaymentMethodsList = forwardRef<PaymentMethodsListHandle, PaymentMe
             </div>
             {showCreateButton && (
               <Button onClick={() => setCreateDialog(true)}>
-                <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                <Plus className="h-4 w-4 me-0 md:me-2" />
                 <span className="hidden md:inline-flex">{t("paymentMethods.list.add")}</span>
               </Button>
             )}
@@ -104,7 +104,7 @@ export const PaymentMethodsList = forwardRef<PaymentMethodsListHandle, PaymentMe
                             >
                               {pm.isActive ? t("clients.stats.active") || "Active" : t("clients.stats.inactive") || "Inactive"}
                             </span>
-                            <div className="text-sm text-muted-foreground ml-2">
+                            <div className="text-sm text-muted-foreground ms-2">
                               {t(`paymentMethods.fields.type.${pm.type?.toLowerCase()}`) || pm.type}
                             </div>
                           </div>

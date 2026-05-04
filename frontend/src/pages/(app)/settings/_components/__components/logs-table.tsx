@@ -6,6 +6,7 @@ import type { Log, LogLevel } from "../logs.settings"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 type LogsTableProps = {
   logs: Log[]
@@ -23,6 +24,7 @@ const levelColors: Record<LogLevel, string> = {
 const ITEMS_PER_PAGE = 50
 
 export function LogsTable({ logs, onSelectLog }: LogsTableProps) {
+  const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
 
   const totalPages = Math.ceil(logs.length / ITEMS_PER_PAGE)
@@ -52,19 +54,19 @@ export function LogsTable({ logs, onSelectLog }: LogsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[140px]">Timestamp</TableHead>
-              <TableHead className="w-[100px]">Level</TableHead>
-              <TableHead className="w-[150px]">Category</TableHead>
-              <TableHead>Message</TableHead>
-              <TableHead className="w-[120px]">User ID</TableHead>
-              <TableHead className="w-[200px]">Path</TableHead>
+              <TableHead className="w-[140px]">{t("settings.logs.columns.timestamp")}</TableHead>
+              <TableHead className="w-[100px]">{t("settings.logs.columns.level")}</TableHead>
+              <TableHead className="w-[150px]">{t("settings.logs.columns.category")}</TableHead>
+              <TableHead>{t("settings.logs.columns.message")}</TableHead>
+              <TableHead className="w-[120px]">{t("settings.logs.columns.userId")}</TableHead>
+              <TableHead className="w-[200px]">{t("settings.logs.columns.path")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {currentLogs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
-                  No logs found
+                  {t("settings.logs.noLogsFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -95,7 +97,7 @@ export function LogsTable({ logs, onSelectLog }: LogsTableProps) {
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
+            {t("settings.logs.page", { current: currentPage, total: totalPages })}
           </div>
           <div className="flex gap-2">
             <Button
@@ -104,8 +106,8 @@ export function LogsTable({ logs, onSelectLog }: LogsTableProps) {
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
+              <ChevronLeft className="h-4 w-4 me-1" />
+              {t("settings.logs.previous")}
             </Button>
             <Button
               variant="outline"
@@ -113,8 +115,8 @@ export function LogsTable({ logs, onSelectLog }: LogsTableProps) {
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
+              {t("settings.logs.next")}
+              <ChevronRight className="h-4 w-4 ms-1" />
             </Button>
           </div>
         </div>

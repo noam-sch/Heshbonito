@@ -149,7 +149,7 @@ export const ReceiptList = forwardRef<ReceiptListHandle, ReceiptListProps>(
                                                         <div className="hidden sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-1">
                                                             <span>
                                                                 <span className="font-medium text-foreground">{t("receipts.list.item.invoice")}:</span>{" "}
-                                                                {receipt.invoice?.rawNumber || receipt.invoice?.number || t("receipts.list.item.noInvoice")}
+                                                                {receipt.invoice?.rawNumber || receipt.invoice?.number || receipt.client?.name || t("receipts.list.item.noInvoice")}
                                                             </span>
                                                             <span>
                                                                 <span className="font-medium text-foreground">{t("receipts.list.item.totalItemCount")}:</span>{" "}
@@ -158,7 +158,7 @@ export const ReceiptList = forwardRef<ReceiptListHandle, ReceiptListProps>(
                                                             <span>
                                                                 <span className="font-medium text-foreground">{t("receipts.list.item.totalPaid")}:</span>{" "}
                                                                 {t("common.valueWithCurrency", {
-                                                                    currency: receipt.invoice?.currency || "USD",
+                                                                    currency: receipt.invoice?.currency || receipt.currency || "ILS",
                                                                     amount: receipt.totalPaid.toFixed(2),
                                                                 })}
                                                             </span>

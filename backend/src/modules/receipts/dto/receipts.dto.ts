@@ -1,12 +1,21 @@
 export class CreateReceiptDto {
-    invoiceId: string;
+    // Optional — when present, the receipt is created from an invoice and
+    // items must reference invoice items. When absent, the receipt is
+    // standalone and clientId / items[].description are required.
+    invoiceId?: string;
+    // Standalone-only fields
+    clientId?: string;
+    currency?: string;
     items: {
-        invoiceItemId: string;
+        // Either invoiceItemId (invoice-linked) or description (standalone)
+        invoiceItemId?: string;
+        description?: string;
         amountPaid: number | string;
     }[];
     paymentMethodId?: string;
     paymentMethod?: string;
     paymentDetails?: string;
+    notes?: string;
 }
 
 export class EditReceiptDto extends CreateReceiptDto {

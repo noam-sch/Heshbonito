@@ -50,7 +50,7 @@ export default function StatsPage() {
   }, [yearlyData, selectedYearlyCurrency]);
 
   const formatCurrency = (val?: number, currencyParam?: string) => {
-    const currency = currencyParam ?? (selectedMonthlyCurrency ?? selectedYearlyCurrency) ?? "EUR";
+    const currency = currencyParam ?? (selectedMonthlyCurrency ?? selectedYearlyCurrency) ?? "ILS";
     try {
       const formatted = new Intl.NumberFormat(i18n.language || "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(val ?? 0);
       return `${formatted} ${currency}`;

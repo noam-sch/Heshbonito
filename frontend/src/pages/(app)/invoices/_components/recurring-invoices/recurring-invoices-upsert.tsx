@@ -106,6 +106,7 @@ export function RecurringInvoiceUpsert({ recurringInvoice, open, onOpenChange }:
         defaultValues: {
             quoteId: undefined,
             clientId: "",
+            currency: "ILS",
             items: [],
             notes: "",
             frequency: "MONTHLY",
@@ -138,6 +139,7 @@ export function RecurringInvoiceUpsert({ recurringInvoice, open, onOpenChange }:
             form.reset({
                 quoteId: undefined,
                 clientId: "",
+                currency: "ILS",
                 items: [],
                 notes: "",
                 frequency: "MONTHLY",

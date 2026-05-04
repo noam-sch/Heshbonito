@@ -1,224 +1,84 @@
-# Invoicerr
+# Heshbonito (חשבונית׳ו)
 
+Israeli accounting / invoicing app. Forked from [Invoicerr](https://github.com/Impre-visible/invoicerr) and adapted for the Israeli context — ILS as the default currency, Hebrew-aware UI, and standalone receipts (קבלות) that can be issued without a prior invoice (חשבונית), as Israeli accounting practice allows.
 
-![Invoicerr Banner](https://github.com/Impre-visible/invoicerr/blob/ac4ea3fb8293b63e0b58bd33ea38b6b7018f673a/Invoicerr_banner.webp)
-
-Invoicerr is a simple, open-source invoicing application designed to help freelancers manage their quotes and invoices efficiently. It provides a clean interface for creating, sending, and tracking quotes and invoices — so you get paid faster, with less hassle.
-
----
-
-![Dashboard Page](https://github.com/user-attachments/assets/18e8af88-cf02-4e35-975a-d57f58d062c6)
-
-<section>
-<img src="https://wakatime.com/badge/user/4cf4132a-4ced-411d-b714-67bdbdc84527/project/2f27011d-6794-4fbe-97c9-9fdef2550fc7.svg?style=flat">
-<img src="https://m3-markdown-badges.vercel.app/stars/12/1/Impre-visible/invoicerr">
-<img src="https://m3-markdown-badges.vercel.app/issues/12/1/Impre-visible/invoicerr">
-</section>
-
-## ✨ Features
-
-- Create and manage invoices  
-- Create and manage quotes (convertible to invoices)  
-- Manage clients and their contact details  
-- Track status of quotes and invoices (signed, paid, unread, etc.)  
-- Built-in quote signing system with secure tokens  
-- Generate and send quote/invoice emails directly from the app
-- Generate clean PDF documents (quotes, invoices, receipts, and more)  
-- Custom brand identity: logo, company name, VAT, and more  
-- Authentication via JWT or OIDC (stored in cookies)
-- International-friendly: Default English UI, customizable currencies  
-- SQLite database for quick local setup  
-- Docker & docker-compose ready for self-hosting  
-- Built with modern stack: React, NestJS, Prisma, SQLite/PostgreSQL  
-- REST API backend, ready for future integrations (mobile & desktop apps)
-- Plugin system for community-made features
+**Stack:** NestJS + Prisma + PostgreSQL on the backend, React + Vite + Tailwind + shadcn/ui on the frontend.
 
 ---
 
-## 🌍 Translation
+## Running it
 
-Invoicerr uses weblate to easily manage the translations
+The whole local dev environment is wrapped in `start.sh`. Run it from the active worktree:
 
-[![Translation status](https://hosted.weblate.org/widget/invoicerr/horizontal-auto.svg)](https://hosted.weblate.org/engage/invoicerr/)
+```bash
+cd .claude/worktrees/suspicious-heyrovsky
+./start.sh
+```
 
-[![Translation status](https://hosted.weblate.org/widget/invoicerr/open-graph.png)](https://hosted.weblate.org/engage/invoicerr/)
+> **Where edits should land.** Active development happens in the git worktree at `.claude/worktrees/suspicious-heyrovsky/` (branch `claude/suspicious-heyrovsky`). `start.sh` resolves all paths relative to itself, so it runs the app from the worktree's `backend/` and `frontend/` — **not** from the top-level checkout. Edit files inside the worktree (or copy edits there) if you want them to take effect. Running `git worktree list` shows the layout.
 
----
+That script:
 
-## 🐳 Docker Installation (Recommended)
+1. Starts PostgreSQL via Homebrew (`brew services start postgresql@17`). Postgres binaries are expected at `/opt/homebrew/opt/postgresql@17/bin`.
+2. Installs backend and frontend deps if `node_modules` is missing.
+3. Runs `npx prisma migrate deploy && npx prisma generate` so any new migrations are applied and the typed client is regenerated.
+4. Starts the backend (`npm run start:dev` on port 3000) and frontend (`npm run dev` on port 5173).
+5. Opens `http://localhost:5173` in the browser.
 
-#### Supported Architectures
+Press `Ctrl+C` to stop everything.
 
-The images are built for the following architectures:
+You don't need a `backend/.env` for normal use — `DATABASE_URL` is expected to be available in your shell environment (the local Postgres uses your macOS user with no password by default, which Prisma reads from your shell env). If you ever need to run Prisma commands by hand, export `DATABASE_URL` first or copy `backend/.env.example` to `backend/.env`.
 
-- `linux/amd64` (x86_64)
-- `linux/arm64/v8` (ARMv8)
+### Where the data lives
 
-#### Why not `linux/arm/v7`?
+PostgreSQL on the local machine, managed by Homebrew. Data files are wherever Homebrew's `postgresql@17` formula puts them (`/opt/homebrew/var/postgresql@17` on Apple Silicon). **It is not Dockerized** — the `docker-compose.yml` files in this repo are inherited from upstream Invoicerr and aren't part of the local workflow.
 
-The `linux/arm/v7` architecture is not supported due to the use of prisma, which does not provide prebuilt binaries for this architecture. This means that the application will not run on 32-bit ARM devices.
+### Migrations
 
-The fastest way to run Invoicerr is using Docker Compose. A prebuilt image is available at [ghcr.io/impre-visible/invoicerr](https://ghcr.io/impre-visible/invoicerr).
+Migrations live in `backend/prisma/migrations/`. Create new ones with `npx prisma migrate dev --name <description>` (from `backend/`). They get applied automatically on the next `start.sh` run.
 
-### 🚀 Quick Start
-
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/Impre-visible/invoicerr.git
-   cd invoicerr
-   ```
-
-2. Edit the `docker-compose.yml` to set your environment variables.
-
-3. Run the app:  
-   ```bash
-   docker compose up -d
-   ```
-
-4. Open your browser at:  
-   ```
-   http://localhost
-   ```
+The Prisma schema is `backend/prisma/schema.prisma`. The generated client lands in `backend/prisma/generated/prisma/` — always regenerate after schema edits (`start.sh` does this, or `npm run generate` from `backend/`).
 
 ---
 
-### 🔧 Environment Variables
+## Project layout
 
-These environment variables are defined in `docker-compose.yml` under the `invoicerr` service:
-
-- `DATABASE_URL`  
-  PostgreSQL connection string. Example:  
-  `postgresql://invoicerr:invoicerr@invoicerr_db:5432/invoicerr_db`
-
-- `APP_URL`  
-  Full public URL of the frontend (e.g., `https://invoicerr.example.com`).  
-  This is required for email templates and links.
-
-- `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`  
-  Credentials and server used for sending emails (quotes, invoices, etc.)
-
-- `SMTP_FROM`  
-  Optional — address used as the sender for emails. If omitted, defaults to `SMTP_USER`.
-
-- `JWT_SECRET`  
-  Optional but recommended for JWT authentication. Can be any random string.  
-  If not set, a default secret will be used. But it can have issues with docker deployments.
-
-Make sure port 80 is available on your host machine, or change the mapping.
+```
+backend/                     NestJS app
+  src/
+    modules/                 One folder per feature (clients, invoices, quotes, receipts, ...)
+    main.ts                  Entry point, listens on :3000
+  prisma/
+    schema.prisma            Single source of truth for the DB schema
+    migrations/              SQL migrations, applied in order
+frontend/                    Vite + React app, listens on :5173
+  src/
+    pages/(app)/             Authenticated app pages
+    components/              Shared UI (incl. CurrencySelect, BetterInput, etc.)
+    types/                   TypeScript interfaces shared across pages
+    locales/                 i18n JSONs (en, fr, de, es, nl)
+e2e/                         Cypress e2e tests (not part of the local dev loop)
+start.sh                     The local dev launcher
+```
 
 ---
 
-## 💻 Manual Installation (Local Development)
+## Heshbonito-specific deviations from upstream Invoicerr
 
-### Prerequisites
-
-- Node.js v20+  
-- SQLite (or configure another `DATABASE_URL`)  
-- PNPM or NPM
-
-### Steps
-
-1. Clone the project:  
-   ```bash
-   git clone https://github.com/Impre-visible/invoicerr.git
-   cd invoicerr
-   ```
-
-2. Backend setup:  
-   ```bash
-   cd backend
-   npm install
-   npx prisma generate
-   npm run start
-   ```
-
-3. Frontend setup (in a new terminal):  
-   ```bash
-   cd frontend
-   npm install
-   npm run start
-   ```
-
-4. Open in your browser:  
-   - Frontend: `http://localhost:5173`  
-   - API: `http://localhost:3000`
+- **Default currency is ILS** (was EUR). Schema default + form defaults across company / client / invoice / quote / receipt / recurring-invoice. The full currency list is still selectable.
+- **Standalone receipts.** `Receipt.invoiceId` is nullable, and a receipt can be issued from scratch with just a client, a currency, and free-form items. The PDF generator and email sender resolve client/company/currency from the receipt's own direct relations when there's no invoice.
+- **Hebrew UI accommodations** are an in-progress concern; treat them as first-class when you touch UI strings.
 
 ---
 
-## 🧪 Lancer les tests end-to-end (Cypress)
+## Conventions worth knowing
 
-Pour lancer les tests e2e localement ou en CI :
-
-1. Démarrer le backend et le frontend avec les variables de test :
-   ```bash
-   cd backend && npm run start:test &
-   cd frontend && npm run start:test &
-   ```
-   (Assurez-vous d'avoir un .env.test dans chaque dossier)
-
-2. Dans un autre terminal, lancer Cypress :
-   ```bash
-   cd e2e
-   npm install
-   npm run e2e:open # ou npm run e2e:run
-   ```
-
-En CI, le workflow GitHub Actions fait ces étapes automatiquement.
+- **Search endpoints have an inconsistent shape.** `/api/invoices/search?query=` returns a paginated `{ pageCount, invoices }` object when `query` is empty, but a flat `Invoice[]` when `query` is set. `/api/clients/search` and similar follow the same pattern. Code consuming them must normalize (see `pages/(app)/receipts/_components/receipt-upsert.tsx` for the pattern).
+- **Receipts can be invoice-linked or standalone.** Backend code branches on `body.invoiceId` in `ReceiptsService.createReceipt`. Don't assume a receipt has an invoice — always optional-chain `receipt.invoice?.…` and fall back to `receipt.client` / `receipt.company` / `receipt.currency`.
+- **Webhooks dispatch fire-and-forget.** All webhook calls in `*.service.ts` are wrapped in try/catch so a misconfigured webhook never breaks the main operation.
 
 ---
 
-## 📸 Screenshots
+## License
 
-<details>
-<summary>Dashboard</summary>
-  
-![Dashboard Page](https://github.com/user-attachments/assets/18e8af88-cf02-4e35-975a-d57f58d062c6)
-  
-</details>
-
-<details>
-<summary>Quotes</summary>
-
-![Quotes Page](https://github.com/user-attachments/assets/588d5cd2-6af3-4cb9-81d3-8faa9f3d30f4)
-
-</details>
-
-<details>
-<summary>Invoices</summary>
-  
-![Invoices Page](https://github.com/user-attachments/assets/8e5134b7-c401-4ff6-bdb9-cfe54b532b29)
-
-</details>
-
-<details>
-<summary>Clients</summary>
-
-![Clients Page](https://github.com/user-attachments/assets/1e9e42be-8c21-4c84-96dd-ce8dca17c32e)
-
-</details>
-
-<details>
-<summary>Settings</summary>
-  
-![Settings Page](https://github.com/user-attachments/assets/b8913f41-109a-4e31-a1b8-3c46a1039414)
-
-</details>
-
-## 🧰 Technologies
-
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/React/react1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/NestJS/nestjs1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/TypeScript/typescript1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Prisma/prisma1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/SQLite/sqlite1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/PostgreSQL/postgresql1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/TailwindCSS/tailwindcss1.svg"/>
-- <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Docker/docker1.svg"/>
-
-## ⚖️ License
-
-This project is dual-licensed:
-- Open Source: [AGPL-3.0](./LICENSE)
-- Commercial: [COMMERCIAL-LICENSE](./COMMERCIAL-LICENSE)
-
-Contact me for commercial use.
+Inherited from upstream Invoicerr — dual-licensed AGPL-3.0 / commercial. See `LICENSE` and `LICENSE.COMMERCIAL.md`.

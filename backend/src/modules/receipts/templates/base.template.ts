@@ -36,8 +36,8 @@ export const baseTemplate = `
         <div class="receipt-info">
             <h2>{{labels.receipt}}</h2>
             <p><strong>{{labels.receipt}}:</strong> #{{number}}<br>
-            <strong>{{labels.paymentDate}}</strong> {{paymentDate}}<br>
-            <strong>{{labels.invoiceRefer}}</strong> #{{invoiceNumber}}</p>
+            <strong>{{labels.paymentDate}}</strong> {{paymentDate}}{{#if hasInvoice}}<br>
+            <strong>{{labels.invoiceRefer}}</strong> #{{invoiceNumber}}{{/if}}</p>
         </div>
     </div>
     <div class="client-info">

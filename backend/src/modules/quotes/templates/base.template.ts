@@ -1,21 +1,21 @@
 export const baseTemplate = `
 <!DOCTYPE html>
-<html>
+<html dir="rtl">
 <head>
     <meta charset="utf-8">
     <title>{{labels.quote}} {{number}}</title>
     <style>
-        body { font-family: {{fontFamily}}, sans-serif; margin: {{padding}}px; color: #333; }
+        body { font-family: {{fontFamily}}, Arial, sans-serif; margin: {{padding}}px; color: #333; direction: rtl; }
         .header { display: flex; justify-content: space-between; margin-bottom: 40px; }
         .company-info h1 { margin: 0; color: {{primaryColor}}; }
-        .quote-info { text-align: right; }
+        .quote-info { text-align: left; }
         .client-info { margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #ddd; }
         th { background-color: {{secondaryColor}}; font-weight: bold; color: {{tableTextColor}}; }
         .total-row { font-weight: bold; background-color: {{secondaryColor}}; color: {{tableTextColor}}; }
         .notes { margin-top: 20px; padding: 20px; background-color: {{secondaryColor}}; border-radius: 4px; color: {{tableTextColor}}; }
-        .payment-info { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid {{primaryColor}}; color: #333; }
+        .payment-info { margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-right: 4px solid {{primaryColor}}; color: #333; }
         .validity { color: #dc2626; font-weight: bold; }
         .logo { max-height: 80px; margin-bottom: 10px; }
     </style>

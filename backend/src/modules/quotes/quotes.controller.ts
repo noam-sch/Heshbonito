@@ -21,12 +21,12 @@ export class QuotesController {
   constructor(private readonly quotesService: QuotesService) { }
 
   @Get()
-  async getQuotesInfo(@Param('page') page: string) {
+  async getQuotesInfo(@Query('page') page: string) {
     return await this.quotesService.getQuotes(page);
   }
 
   @Sse('sse')
-  async getQuotesInfoSse(@Param('page') page: string) {
+  async getQuotesInfoSse(@Query('page') page: string) {
     return interval(1000).pipe(
       startWith(0),
       switchMap(() => from(this.quotesService.getQuotes(page))),

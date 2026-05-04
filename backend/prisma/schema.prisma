@@ -304,7 +304,7 @@ model Company {
   id          String   @id @default(cuid())
   name        String
   description String?
-  currency    Currency @default(EUR)
+  currency    Currency @default(ILS)
   legalId     String?
   foundedAt   DateTime
   VAT         String?
@@ -333,6 +333,7 @@ model Company {
   pdfConfig        PDFConfig          @relation(fields: [pDFConfigId], references: [id])
   Quote            Quote[]
   Invoice          Invoice[]
+  Receipt          Receipt[]
   PaymentMethod    PaymentMethod[]
   emailTemplates   MailTemplate[]
   RecurringInvoice RecurringInvoice[]
@@ -365,6 +366,7 @@ model Client {
   isActive         Boolean            @default(true)
   Quote            Quote[]
   Invoice          Invoice[]
+  Receipt          Receipt[]
   RecurringInvoice RecurringInvoice[]
 }
 
@@ -510,25 +512,45 @@ model RecurringInvoiceItem {
 
 // Receipt models
 model ReceiptItem {
-  id            String      @id @default(uuid())
-  invoiceItem   InvoiceItem @relation(fields: [invoiceItemId], references: [id])
-  invoiceItemId String
+  id            String       @id @default(uuid())
+  // Optional link to an invoice item — populated when the receipt is created
+  // from an invoice. For standalone receipts, this is null and the description
+  // / amount fields below stand on their own.
+  invoiceItem   InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
+  invoiceItemId String?
+  description   String? // Used for standalone receipts (no linked invoice item)
   amountPaid    Float // Amount paid for this item
-  Receipt       Receipt     @relation(fields: [receiptId], references: [id])
+  Receipt       Receipt      @relation(fields: [receiptId], references: [id])
   receiptId     String
 }
 
 model Receipt {
-  id              String        @id @default(cuid())
-  number          Int           @default(autoincrement())
-  rawNumber       String? // Raw number for custom formats
-  invoiceId       String
-  invoice         Invoice       @relation(fields: [invoiceId], references: [id])
+  id        String  @id @default(cuid())
+  number    Int     @default(autoincrement())
+  rawNumber String? // Raw number for custom formats
+
+  // Optional link to an invoice. When present, client/company/currency are
+  // looked up via the invoice. When absent (standalone receipt), the
+  // direct relations below are used instead.
+  invoiceId String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+
+  // Direct relations used for standalone receipts. Always populated for
+  // receipts created without an invoice; optionally populated for legacy
+  // / invoice-linked receipts (in which case the invoice is the source of
+  // truth and these may be null).
+  clientId  String?
+  client    Client?  @relation(fields: [clientId], references: [id])
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
+  currency  Currency? // Currency for standalone receipts
+
   items           ReceiptItem[]
   totalPaid       Float
   paymentMethod   String        @default("") // Ex: "Bank Transfer", "PayPal", "Cash"
   paymentDetails  String        @default("") // Details for the payment method (e.g., bank account number)
   paymentMethodId String?
+  notes           String?       @default("")
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }

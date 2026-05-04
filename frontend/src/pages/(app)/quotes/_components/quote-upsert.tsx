@@ -99,8 +99,9 @@ export function QuoteUpsert({ quote, open, onOpenChange }: QuoteUpsertDialogProp
         defaultValues: {
             title: "",
             clientId: "",
+            currency: "ILS",
             validUntil: undefined,
-             discountRate: 0,
+            discountRate: 0,
             notes: "",
             items: [],
         },
@@ -132,6 +133,7 @@ export function QuoteUpsert({ quote, open, onOpenChange }: QuoteUpsertDialogProp
             form.reset({
                 title: "",
                 clientId: "",
+                currency: "ILS",
                 validUntil: undefined,
                 discountRate: 0,
                 notes: "",

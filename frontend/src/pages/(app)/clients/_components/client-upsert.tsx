@@ -93,7 +93,7 @@ export function ClientUpsert({ client, open, onOpenChange, onCreate }: ClientUps
             description: "",
             legalId: "",
             VAT: "",
-            currency: null,
+            currency: "ILS",
             foundedAt: new Date(),
             contactFirstname: "",
             contactLastname: "",

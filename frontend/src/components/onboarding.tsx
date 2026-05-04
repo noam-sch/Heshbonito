@@ -203,7 +203,7 @@ export default function OnBoarding({
       VAT: "",
       exemptVat: false,
       foundedAt: new Date(),
-      currency: "",
+      currency: "ILS",
       address: "",
       postalCode: "",
       city: "",

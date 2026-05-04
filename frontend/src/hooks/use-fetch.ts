@@ -8,10 +8,12 @@ type UseGetResult<T> = {
 };
 
 export async function authenticatedFetch(input: RequestInfo, init: RequestInit = {}): Promise<Response> {
+    // Don't set Content-Type for FormData — the browser sets it with the correct multipart boundary
+    const isFormData = init.body instanceof FormData;
     const res = await fetch(input, {
         ...init,
         credentials: "include",
-        headers: {
+        headers: isFormData ? { ...(init.headers || {}) } : {
             "Content-Type": "application/json",
             ...(init.headers || {})
         },
@@ -20,7 +22,7 @@ export async function authenticatedFetch(input: RequestInfo, init: RequestInit =
     if (res.status === 401) {
         if (!window.location.pathname.includes("/sign-in") && !window.location.pathname.includes("/auth")) {
             window.location.href = "/auth/sign-in";
-            console.warn("Session expirée ou invalide");
+            console.warn("Session expired or invalid");
         }
     }
 
@@ -147,7 +149,7 @@ export function useSse<T = any>(url: string, options?: EventSourceInit): useSseR
         setError(null);
 
         es.onopen = () => {
-            // Optionnel : gérer l'ouverture
+            // Optional: handle open event
         };
 
         es.onmessage = (event) => {
@@ -210,7 +212,7 @@ function createMethodHook(method: string) {
                         ...(options.headers || {}),
                         ...(extraOptions.headers || {}),
                     },
-                    // Gestion intelligente du body : si c'est un objet, on JSON.stringify, sinon on passe tel quel
+                    // Smart body handling: JSON.stringify objects, pass other values as-is
                     body: body ? JSON.stringify(body) : (options.body ? JSON.stringify(options.body) : undefined),
                     ...options,
                     ...extraOptions,

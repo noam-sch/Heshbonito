@@ -86,19 +86,19 @@ export default function Dashboard() {
 
     return (
         <div className="max-w-7xl mx-auto space-y-6 p-6">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                     <LayoutDashboard className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold text-foreground">{t("dashboard.title")}</h1>
                     {/* @ts-ignore */}
-                    <p className="text-muted-foreground">{t("dashboard.welcomeMessage", { firstname: user?.user.firstname })}</p>
+                    <p className="text-muted-foreground">{t("dashboard.welcomeMessage", { firstname: user?.user?.firstname })}</p>
                 </div>
             </div>
 
             <section className="space-y-6">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500 rounded-lg">
                         <DollarSign className="h-5 w-5 text-white" />
                     </div>
@@ -129,7 +129,7 @@ export default function Dashboard() {
                                                         <ArrowRight className="h-4 w-4 text-gray-400" />
                                                     )}
                                                     <span
-                                                        className={`text-sm ml-1 ${(dashboardData?.revenue.monthlyChangePercent || 0) > 0
+                                                        className={`text-sm ms-1 ${(dashboardData?.revenue.monthlyChangePercent || 0) > 0
                                                             ? "text-emerald-600"
                                                             : (dashboardData?.revenue.monthlyChangePercent || 0) < 0
                                                                 ? "text-red-600"
@@ -206,7 +206,7 @@ export default function Dashboard() {
                                                         <ArrowRight className="h-4 w-4 text-gray-400" />
                                                     )}
                                                     <span
-                                                        className={`text-sm ml-1 ${(dashboardData?.revenue.yearlyChangePercent || 0) > 0
+                                                        className={`text-sm ms-1 ${(dashboardData?.revenue.yearlyChangePercent || 0) > 0
                                                             ? "text-emerald-600"
                                                             : (dashboardData?.revenue.yearlyChangePercent || 0) < 0
                                                                 ? "text-red-600"
@@ -266,7 +266,7 @@ export default function Dashboard() {
             </section>
 
             <section className="space-y-6">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500 rounded-lg">
                         <FileText className="h-5 w-5 text-white" />
                     </div>
@@ -328,7 +328,7 @@ export default function Dashboard() {
             </section>
 
             <section className="space-y-6">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                     <div className="p-2 bg-emerald-500 rounded-lg">
                         <ReceiptText className="h-5 w-5 text-white" />
                     </div>
@@ -461,7 +461,7 @@ function DashboardStat({
     return (
         <Card className={`w-full ${className}`}>
             <CardContent>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center gap-4">
                     <div className={`p-3 ${colors.bg} rounded-lg`}>
                         <div className="w-6 h-6 flex items-center justify-center">
                             {icon ? (

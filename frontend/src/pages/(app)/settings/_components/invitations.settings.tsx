@@ -113,7 +113,7 @@ export default function InvitationsSettings() {
                             />
                         </div>
                         <Button onClick={createInvitation} disabled={creating}>
-                            <PlusIcon className="h-4 w-4 mr-2" />
+                            <PlusIcon className="h-4 w-4 me-2" />
                             {creating
                                 ? t("settings.invitations.create.creating")
                                 : t("settings.invitations.create.button")}

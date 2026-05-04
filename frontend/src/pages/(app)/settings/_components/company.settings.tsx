@@ -136,6 +136,11 @@ export default function CompanySettings() {
                 return ALLOWED_DATE_FORMATS.includes(val)
             }, t("settings.company.form.dateFormat.errors.format")),
         exemptVat: z.boolean().optional(),
+        defaultVatRate: z
+            .number({ invalid_type_error: t("settings.company.form.defaultVatRate.errors.invalid") })
+            .min(0, t("settings.company.form.defaultVatRate.errors.min"))
+            .max(100, t("settings.company.form.defaultVatRate.errors.max"))
+            .optional(),
     })
 
     const { data } = useGet<Company>("/api/company/info")
@@ -150,6 +155,7 @@ export default function CompanySettings() {
             legalId: "",
             VAT: "",
             exemptVat: false,
+            defaultVatRate: 18,
             foundedAt: new Date(),
             currency: "",
             address: "",
@@ -176,6 +182,7 @@ export default function CompanySettings() {
                 ...data,
                 foundedAt: new Date(data.foundedAt),
                 exemptVat: !!data.exemptVat,
+                defaultVatRate: data.defaultVatRate ?? 18,
             })
         }
     }, [data, form])
@@ -631,6 +638,35 @@ export default function CompanySettings() {
                                             </Select>
                                         </FormControl>
                                         <FormDescription>{t("settings.company.form.dateFormat.description")}</FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="defaultVatRate"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t("settings.company.form.defaultVatRate.label")}</FormLabel>
+                                        <FormControl>
+                                            <div className="flex items-center gap-2">
+                                                <Input
+                                                    type="number"
+                                                    min={0}
+                                                    max={100}
+                                                    step={0.1}
+                                                    placeholder="18"
+                                                    className="w-32"
+                                                    {...field}
+                                                    value={field.value ?? ""}
+                                                    onChange={(e) => field.onChange(e.target.value === "" ? undefined : parseFloat(e.target.value))}
+                                                    data-cy="company-defaultvatrate-input"
+                                                />
+                                                <span className="text-muted-foreground">%</span>
+                                            </div>
+                                        </FormControl>
+                                        <FormDescription>{t("settings.company.form.defaultVatRate.description")}</FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}

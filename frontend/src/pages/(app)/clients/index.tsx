@@ -63,7 +63,7 @@ export default function Clients() {
             {!searchTerm && (
                 <div className="mt-6">
                     <Button onClick={handleAddClick}>
-                        <Plus className="h-4 w-4 mr-2" />
+                        <Plus className="h-4 w-4 me-2" />
                         {t("clients.actions.addNew")}
                     </Button>
                 </div>
@@ -74,7 +74,7 @@ export default function Clients() {
     return (
         <div className="max-w-7xl mx-auto space-y-6 p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 lg:justify-between">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 rounded-lg">
                         <Users className="h-5 w-5 text-blue-600" />
                     </div>
@@ -91,16 +91,16 @@ export default function Clients() {
 
                 <div className="flex flex-row items-center gap-4 w-full lg:w-fit lg:gap-6 lg:justify-between">
                     <div className="relative w-full lg:w-fit">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute start-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             placeholder={t("clients.search.placeholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-full"
+                            className="ps-10 w-full"
                         />
                     </div>
                     <Button onClick={handleAddClick}>
-                        <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                        <Plus className="h-4 w-4 me-0 md:me-2" />
                         <span className="hidden md:inline-flex">{t("clients.actions.addNew")}</span>
                     </Button>
                 </div>
@@ -109,7 +109,7 @@ export default function Clients() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-100 rounded-lg">
                                 <Users className="h-6 w-6 text-blue-600" />
                             </div>
@@ -123,7 +123,7 @@ export default function Clients() {
 
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-green-100 rounded-lg">
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -141,7 +141,7 @@ export default function Clients() {
 
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-gray-100 rounded-lg">
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
@@ -160,7 +160,7 @@ export default function Clients() {
 
             <Card className="gap-0">
                 <CardHeader className="border-b">
-                    <CardTitle className="flex items-center space-x-2">
+                    <CardTitle className="flex items-center gap-2">
                         <Users className="h-5 w-5 " />
                         <span>{t("clients.list.title")}</span>
                     </CardTitle>
@@ -191,24 +191,24 @@ export default function Clients() {
                                                     </span>
                                                     <span
                                                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${client.type === 'INDIVIDUAL' ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
-                                                            } w-fit ml-2`}
+                                                            } w-fit ms-2`}
                                                     >
                                                         {client.type === 'INDIVIDUAL' ? t("clients.upsert.fields.type.individual") : t("clients.upsert.fields.type.company")}
                                                     </span>
                                                 </div>
                                                 <div className="mt-2 flex flex-col lg:flex-row flex-wrap gap-2 text-sm text-primary">
-                                                    <div className="flex items-center space-x-1">
+                                                    <div className="flex items-center gap-1">
                                                         <Mail className="h-4 w-4" />
                                                         <span>{client.contactEmail || "-"}</span>
                                                     </div>
                                                     {client.contactPhone && (
-                                                        <div className="flex items-center space-x-1">
+                                                        <div className="flex items-center gap-1">
                                                             <Phone className="h-4 w-4" />
                                                             <span>{client.contactPhone || "-"}</span>
                                                         </div>
                                                     )}
                                                     {client.city && (
-                                                        <div className="flex items-center space-x-1">
+                                                        <div className="flex items-center gap-1">
                                                             <MapPin className="h-4 w-4" />
                                                             <span>{client.city}</span>
                                                         </div>
@@ -217,13 +217,13 @@ export default function Clients() {
                                             </div>
                                         </div>
 
-                                        <div className="mt-0 w-fit flex flex-col lg:flex-row space-x-2 justify-center items-center lg:justify-end">
+                                        <div className="mt-0 w-fit flex flex-col lg:flex-row gap-2 justify-center items-center lg:justify-end">
                                             <Button
                                                 tooltip={t("clients.list.tooltips.view")}
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleView(client)}
-                                                className="text-gray-600 hover:text-blue-600 mr-2"
+                                                className="text-gray-600 hover:text-blue-600 me-2"
                                                 dataCy={`view-client-button-${client.contactEmail}`}
                                             >
                                                 <Eye className="h-4 w-4" />
@@ -233,7 +233,7 @@ export default function Clients() {
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleEdit(client)}
-                                                className="text-gray-600 hover:text-green-600 mr-2"
+                                                className="text-gray-600 hover:text-green-600 me-2"
                                                 dataCy={`edit-client-button-${client.contactEmail}`}
                                             >
                                                 <Edit className="h-4 w-4" />
@@ -243,7 +243,7 @@ export default function Clients() {
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleDelete(client)}
-                                                className="text-gray-600 hover:text-red-600 mr-2"
+                                                className="text-gray-600 hover:text-red-600 me-2"
                                                 dataCy={`delete-client-button-${client.contactEmail}`}
                                             >
                                                 <Trash2 className="h-4 w-4" />

@@ -1135,8 +1135,17 @@
                     }
                 },
                 "exemptVat": {
-                    "label": "TVA unapplicable",
-                    "description": "Display the legal notice 'VAT not applicable, art. 293 B of the CGI' on future documents when enabled and if the company's country is France."
+                    "label": "VAT Exempt",
+                    "description": "When enabled, documents will be calculated without VAT and marked as 'VAT Exempt'."
+                },
+                "defaultVatRate": {
+                    "label": "Default VAT Rate",
+                    "description": "The VAT rate automatically applied to new line items in quotes and invoices. Israeli VAT is 18%.",
+                    "errors": {
+                        "invalid": "Please enter a valid number",
+                        "min": "VAT rate cannot be negative",
+                        "max": "VAT rate cannot exceed 100%"
+                    }
                 },
                 "saving": "Saving...",
                 "saveSettings": "Save Settings"
@@ -1460,6 +1469,42 @@
                 "delete": "Delete",
                 "editPrompt": "Enter new webhook URL"
             }
+        },
+        "logs": {
+            "title": "Activity Logs",
+            "description": "View system logs and user activity",
+            "searchPlaceholder": "Search logs...",
+            "dateRange": "Date Range",
+            "dateFrom": "From",
+            "dateTo": "To",
+            "clearFilters": "Clear Filters",
+            "level": "Level:",
+            "category": "Category:",
+            "allCategories": "All categories",
+            "showing": "Showing {{filtered}} of {{total}} logs",
+            "noLogsFound": "No logs found",
+            "page": "Page {{current}} of {{total}}",
+            "previous": "Previous",
+            "next": "Next",
+            "columns": {
+                "timestamp": "Timestamp",
+                "level": "Level",
+                "category": "Category",
+                "message": "Message",
+                "userId": "User ID",
+                "path": "Path"
+            },
+            "details": {
+                "title": "Log Details",
+                "timestamp": "Timestamp",
+                "category": "Category",
+                "userId": "User ID",
+                "path": "Path",
+                "message": "Message",
+                "detailsJson": "Details (JSON)",
+                "logId": "Log ID",
+                "na": "N/A"
+            }
         }
     },
     "sidebar": {
@@ -1582,6 +1627,10 @@
         }
     },
     "common": {
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next"
+        },
         "previous": "Previous",
         "next": "Next",
         "loading": "Loading...",
@@ -1784,5 +1833,131 @@
         "selectThisFolder": "Select This Folder",
         "noSubdirectories": "No subdirectories found",
         "loading": "Loading directories..."
+    },
+    "onboarding": {
+        "steps": {
+            "basic": "Basic Info",
+            "address": "Address",
+            "contact": "Contact",
+            "settings": "Settings"
+        }
+    },
+    "signaturePage": {
+        "loading": "Loading...",
+        "loadingSignature": "Loading signature...",
+        "loadingPdf": "Loading PDF...",
+        "title": "Quote Signature",
+        "subtitle": "Quote #{{number}} • Expires on {{date}}",
+        "signed": {
+            "title": "Quote signed",
+            "description": "This quote was signed on {{date}}"
+        },
+        "expired": {
+            "title": "Signature expired",
+            "description": "This signature link expired on {{date}}"
+        },
+        "ready": {
+            "title": "Quote signature",
+            "description": "To sign this quote, click the button below. A verification code will be sent by email.",
+            "sendCode": "Send verification code",
+            "sending": "Sending..."
+        },
+        "otpSent": {
+            "title": "Verification code sent",
+            "description": "A verification code has been sent to your email address. Please enter it below to sign the quote.",
+            "label": "Verification code",
+            "sign": "Sign quote",
+            "signing": "Signing in progress...",
+            "cancel": "Cancel"
+        },
+        "error": {
+            "description": "An error occurred while processing your request. Please try again later.",
+            "retry": "Retry",
+            "sendOtpFailed": "Failed to send OTP code",
+            "signFailed": "Failed to sign quote"
+        },
+        "preview": {
+            "title": "Quote Preview",
+            "error": "Error loading PDF",
+            "retry": "Retry",
+            "download": "Download PDF"
+        },
+        "info": {
+            "title": "Quote Information",
+            "number": "Number:",
+            "status": "Status:",
+            "expiresOn": "Expires on:",
+            "signedOn": "Signed on:"
+        },
+        "status": {
+            "signed": "Signed",
+            "expired": "Expired",
+            "viewed": "Viewed",
+            "sent": "Sent",
+            "draft": "Draft"
+        }
+    },
+    "excel": {
+        "export": {
+            "button": "Export to Excel",
+            "quotes": "Export Quotes",
+            "invoices": "Export Invoices",
+            "receipts": "Export Receipts",
+            "success": "File downloaded successfully",
+            "error": "Error exporting file"
+        },
+        "import": {
+            "button": "Import from Excel",
+            "title": "Import from Excel",
+            "upload": "Upload file (.xlsx)",
+            "dragDrop": "Drag & drop file here, or click to select",
+            "downloadTemplate": "Download Template",
+            "validRows": "{{count}} valid rows",
+            "errorRows": "{{count}} rows with errors",
+            "confirm": "Import {{count}} documents",
+            "success": "{{count}} documents imported successfully",
+            "error": "Error importing file",
+            "noFile": "No file selected",
+            "invalidFile": "Invalid file - please upload a .xlsx file",
+            "quotes": "Import Quotes",
+            "invoices": "Import Invoices",
+            "processingFile": "Processing file...",
+            "noTemplate": "Don't have a template? Download a ready-to-use one",
+            "documents": "{{count}} documents",
+            "errors": "Errors",
+            "moreErrors": "...and {{count}} more errors",
+            "moreRows": "...and {{count}} more rows",
+            "importing": "Importing documents...",
+            "cancel": "Cancel",
+            "back": "Back",
+            "colClient": "Client",
+            "colDescription": "Description",
+            "colQuantity": "Quantity",
+            "colPrice": "Price",
+            "preview": "Preview",
+            "row": "Row",
+            "field": "Field",
+            "errorMessage": "Error",
+            "clientNotFound": "Client not found: {{name}}",
+            "columns": {
+                "number": "Number",
+                "date": "Date",
+                "client": "Client",
+                "title": "Title",
+                "status": "Status",
+                "subtotal": "Subtotal (excl. VAT)",
+                "vat": "VAT",
+                "total": "Total",
+                "currency": "Currency",
+                "description": "Description",
+                "quantity": "Quantity",
+                "unitPrice": "Unit Price",
+                "type": "Type",
+                "vatRate": "VAT Rate (%)",
+                "documentNumber": "Document Number",
+                "dueDate": "Due Date",
+                "notes": "Notes"
+            }
+        }
     }
 }

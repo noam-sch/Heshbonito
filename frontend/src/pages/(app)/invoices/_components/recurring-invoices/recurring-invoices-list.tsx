@@ -63,16 +63,16 @@ export const RecurringInvoiceList = forwardRef<RecurringInvoiceListHandle, Recur
                 <Card className="gap-0">
                     <CardHeader className="border-b flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="flex items-center space-x-2">
+                            <CardTitle className="flex items-center gap-2">
                                 <ReceiptText className="h-5 w-5 " />
                                 <span>{title}</span>
                             </CardTitle>
                             <CardDescription>{description}</CardDescription>
                         </div>
                         {showCreateButton && (
-                            <div className="flex space-x-2">
+                            <div className="flex gap-2">
                                 <Button onClick={() => setCreateRecurringInvoiceDialog(true)}>
-                                    <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                                    <Plus className="h-4 w-4 me-0 md:me-2" />
                                     <span className="hidden md:inline-flex">{t("recurringInvoices.list.actions.addNew")}</span>
                                 </Button>
                             </div>

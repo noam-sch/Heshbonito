@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -73,17 +74,18 @@ function PaginationPrevious({
 }: React.ComponentProps<typeof PaginationLink> & {
   disabled?: boolean
 }) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
       aria-label="Go to previous page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className, {
+      className={cn("gap-1 px-2.5 sm:ps-2.5", className, {
         "cursor-not-allowed opacity-50": disabled,
       })}
       {...props}
     >
-      <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <ChevronLeftIcon className="rtl:rotate-180" />
+      <span className="hidden sm:block">{t("common.pagination.previous")}</span>
     </PaginationLink>
   )
 }
@@ -95,17 +97,18 @@ function PaginationNext({
 }: React.ComponentProps<typeof PaginationLink> & {
   disabled?: boolean
 }) {
+  const { t } = useTranslation()
   return (
     <PaginationLink
       aria-label="Go to next page"
       size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className, {
+      className={cn("gap-1 px-2.5 sm:pe-2.5", className, {
         "cursor-not-allowed opacity-50": disabled,
       })}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
-      <ChevronRightIcon />
+      <span className="hidden sm:block">{t("common.pagination.next")}</span>
+      <ChevronRightIcon className="rtl:rotate-180" />
     </PaginationLink>
   )
 }

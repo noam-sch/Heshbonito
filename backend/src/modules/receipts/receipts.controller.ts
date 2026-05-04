@@ -21,12 +21,12 @@ export class ReceiptsController {
   constructor(private readonly receiptsService: ReceiptsService) { }
 
   @Get()
-  async getReceiptsInfo(@Param('page') page: string) {
+  async getReceiptsInfo(@Query('page') page: string) {
     return await this.receiptsService.getReceipts(page);
   }
 
   @Sse('sse')
-  async getReceiptsInfoSse(@Param('page') page: string) {
+  async getReceiptsInfoSse(@Query('page') page: string) {
     return interval(1000).pipe(
       startWith(0),
       switchMap(() => from(this.receiptsService.getReceipts(page))),

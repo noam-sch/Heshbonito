@@ -88,7 +88,7 @@ export async function generateQuotePdf(id: string): Promise<Uint8Array> {
         discountAmount: discountAmountValue.toFixed(2),
         discountRate: Number(normalizedDiscountRate.toFixed(2)),
         hasDiscount,
-        vatExemptText: quote.company.exemptVat && (quote.company.country || '').toUpperCase() === 'FRANCE' ? 'TVA non applicable, art. 293 B du CGI' : null,
+        vatExemptText: quote.company.exemptVat ? 'עוסק פטור ממע"מ' : null,
 
         paymentMethod: paymentMethodType,
         paymentDetails: paymentDetails,

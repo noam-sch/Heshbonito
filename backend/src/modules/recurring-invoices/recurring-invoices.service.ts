@@ -50,7 +50,7 @@ export class RecurringInvoicesService {
 
     async createRecurringInvoice(data: UpsertInvoicesDto) {
         const company = await prisma.company.findFirst();
-        const isVatExemptFrance = !!(company?.exemptVat && (company?.country || '').toUpperCase() === 'FRANCE');
+        const isVatExempt = !!company?.exemptVat;
 
         // Calculate totals
         let totalHT = 0;
@@ -59,12 +59,12 @@ export class RecurringInvoicesService {
 
         for (const item of data.items) {
             const itemHT = item.quantity * item.unitPrice;
-            const vatRate = isVatExemptFrance ? 0 : (item.vatRate || 0);
+            const vatRate = isVatExempt ? 0 : (item.vatRate ?? 0);
             const itemVAT = itemHT * (vatRate / 100);
             totalHT += itemHT;
             totalVAT += itemVAT;
         }
-        totalTTC = isVatExemptFrance ? totalHT : (totalHT + totalVAT);
+        totalTTC = isVatExempt ? totalHT : (totalHT + totalVAT);
 
         const today = new Date();
         const nextMonday = new Date(today);
@@ -96,7 +96,7 @@ export class RecurringInvoicesService {
                         description: item.description,
                         quantity: item.quantity,
                         unitPrice: item.unitPrice,
-                        vatRate: isVatExemptFrance ? 0 : item.vatRate,
+                        vatRate: isVatExempt ? 0 : item.vatRate,
                         type: item.type,
                         order: item.order || index,
                     })),
@@ -126,7 +126,7 @@ export class RecurringInvoicesService {
 
     async updateRecurringInvoice(id: string, data: UpsertInvoicesDto) {
         const company = await prisma.company.findFirst();
-        const isVatExemptFrance = !!(company?.exemptVat && (company?.country || '').toUpperCase() === 'FRANCE');
+        const isVatExempt = !!company?.exemptVat;
 
         // Calculate totals
         let totalHT = 0;
@@ -135,12 +135,12 @@ export class RecurringInvoicesService {
 
         for (const item of data.items) {
             const itemHT = item.quantity * item.unitPrice;
-            const vatRate = isVatExemptFrance ? 0 : (item.vatRate || 0);
+            const vatRate = isVatExempt ? 0 : (item.vatRate ?? 0);
             const itemVAT = itemHT * (vatRate / 100);
             totalHT += itemHT;
             totalVAT += itemVAT;
         }
-        totalTTC = isVatExemptFrance ? totalHT : (totalHT + totalVAT);
+        totalTTC = isVatExempt ? totalHT : (totalHT + totalVAT);
 
         // Update recurring invoice
         const recurringInvoice = await prisma.recurringInvoice.update({
@@ -165,7 +165,7 @@ export class RecurringInvoicesService {
                         description: item.description,
                         quantity: item.quantity,
                         unitPrice: item.unitPrice,
-                        vatRate: isVatExemptFrance ? 0 : item.vatRate,
+                        vatRate: isVatExempt ? 0 : item.vatRate,
                         type: item.type,
                         order: item.order || index,
                     })),

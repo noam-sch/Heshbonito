@@ -41,6 +41,7 @@ export default function Receipts() {
             (receipt) =>
                 receipt.invoice?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 receipt.invoice?.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                receipt.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 receipt.rawNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 receipt.number?.toString().includes(searchTerm) ||
                 receipt.invoice?.rawNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||

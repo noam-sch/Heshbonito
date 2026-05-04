@@ -88,10 +88,11 @@ export class StatsService {
         // For each receipt item, compute net = amountPaid / (1 + vatRate/100)
         for (const r of receiptsInYear) {
             const currency = r.invoice?.currency;
-            if (!currency) continue;
+            if (!currency || !r.invoice) continue;
+            const invoice = r.invoice;
             ensureCurrency(currency);
             const net = r.items.reduce((sum: number, item: any) => {
-                const invItem = r.invoice.items.find((ii: any) => ii.id === item.invoiceItemId);
+                const invItem = invoice.items.find((ii: any) => ii.id === item.invoiceItemId);
                 const vat = invItem?.vatRate || 0;
                 const netItem = item.amountPaid / (1 + vat / 100);
                 return sum + netItem;
@@ -199,10 +200,11 @@ export class StatsService {
         // Revenue
         for (const r of receiptsInRange) {
             const currency = r.invoice?.currency;
-            if (!currency) continue;
+            if (!currency || !r.invoice) continue;
+            const invoice = r.invoice;
             ensureCurrencyYears(currency);
             const net = r.items.reduce((sum: number, item: any) => {
-                const invItem = r.invoice.items.find((ii: any) => ii.id === item.invoiceItemId);
+                const invItem = invoice.items.find((ii: any) => ii.id === item.invoiceItemId);
                 const vat = invItem?.vatRate || 0;
                 const netItem = item.amountPaid / (1 + vat / 100);
                 return sum + netItem;

@@ -18,11 +18,46 @@ import { clampDiscountRate } from '@/utils/financial';
 export class ReceiptsService {
     private readonly logger: Logger;
 
+    /**
+     * Default include shape for receipt queries — pulls the items, the
+     * receipt's own client/company (used for standalone receipts), and the
+     * linked invoice with its items+client+quote (used for invoice-linked
+     * receipts). Keep listing/search/PDF queries consistent so the frontend
+     * doesn't have to branch on shape.
+     */
+    private static readonly receiptInclude = {
+        items: true,
+        client: true,
+        company: true,
+        invoice: {
+            include: {
+                items: true,
+                client: true,
+                quote: true,
+            },
+        },
+    } as const;
+
     constructor(
         private readonly mailService: MailService,
         private readonly webhookDispatcher: WebhookDispatcherService
     ) {
         this.logger = new Logger(ReceiptsService.name);
+    }
+
+    /**
+     * Receipts can reference a saved PaymentMethod by id, but historically the
+     * `paymentMethod` field was a free-text string. The frontend wants an
+     * object when one is available, so resolve+attach it post-query.
+     */
+    private async attachPaymentMethods<T extends { paymentMethodId?: string | null; paymentMethod?: any }>(
+        receipts: T[],
+    ): Promise<T[]> {
+        return Promise.all(receipts.map(async (r) => {
+            if (!r.paymentMethodId) return r;
+            const pm = await prisma.paymentMethod.findUnique({ where: { id: r.paymentMethodId } });
+            return pm ? { ...r, paymentMethod: pm } : r;
+        }));
     }
 
     async getReceipts(page: string) {
@@ -36,98 +71,41 @@ export class ReceiptsService {
             throw new BadRequestException('No company found. Please create a company first.');
         }
 
-        const receipts = await prisma.receipt.findMany({
-            skip,
-            take: pageSize,
-            orderBy: {
-                createdAt: 'desc',
-            },
-            include: {
-                items: true,
-                invoice: {
-                    include: {
-                        items: true,
-                        client: true,
-                        quote: true,
-                    }
-                }
-            },
-        });
+        const [receipts, totalReceipts] = await Promise.all([
+            prisma.receipt.findMany({
+                skip,
+                take: pageSize,
+                orderBy: { createdAt: 'desc' },
+                include: ReceiptsService.receiptInclude,
+            }),
+            prisma.receipt.count(),
+        ]);
 
-        const totalReceipts = await prisma.receipt.count();
-
-        // Attach payment method object when available so frontend can consume receipt.paymentMethod as an object
-        const receiptsWithPM = await Promise.all(receipts.map(async (r: any) => {
-            if (r.paymentMethodId) {
-                const pm = await prisma.paymentMethod.findUnique({ where: { id: r.paymentMethodId } });
-                return { ...r, paymentMethod: pm ?? r.paymentMethod };
-            }
-            return r;
-        }));
-
-        return { pageCount: Math.ceil(totalReceipts / pageSize), receipts: receiptsWithPM };
+        return {
+            pageCount: Math.ceil(totalReceipts / pageSize),
+            receipts: await this.attachPaymentMethods(receipts),
+        };
     }
 
     async searchReceipts(query: string) {
-        if (!query) {
-            const results = await prisma.receipt.findMany({
-                take: 10,
-                orderBy: {
-                    number: 'asc',
-                },
-                include: {
-                    items: true,
-                    invoice: {
-                        include: {
-                            client: true,
-                            quote: true,
-                        }
-                    }
-                },
-            });
-
-            const resultsWithPM = await Promise.all(results.map(async (r: any) => {
-                if (r.paymentMethodId) {
-                    const pm = await prisma.paymentMethod.findUnique({ where: { id: r.paymentMethodId } });
-                    return { ...r, paymentMethod: pm ?? r.paymentMethod };
-                }
-                return r;
-            }));
-
-            return resultsWithPM;
-        }
-
-        const results = await prisma.receipt.findMany({
-            where: {
+        const where = query
+            ? {
                 OR: [
                     { invoice: { quote: { title: { contains: query } } } },
                     { invoice: { client: { name: { contains: query } } } },
+                    { client: { name: { contains: query } } },
                 ],
-            },
+            }
+            : undefined;
+
+        const results = await prisma.receipt.findMany({
+            where,
             take: 10,
-            orderBy: {
-                number: 'asc',
-            },
-            include: {
-                items: true,
-                invoice: {
-                    include: {
-                        client: true,
-                        quote: true,
-                    }
-                }
-            },
+            orderBy: { number: 'asc' },
+            include: ReceiptsService.receiptInclude,
         });
 
-        const resultsWithPM = await Promise.all(results.map(async (r: any) => {
-            if (r.paymentMethodId) {
-                const pm = await prisma.paymentMethod.findUnique({ where: { id: r.paymentMethodId } });
-                return { ...r, paymentMethod: pm ?? r.paymentMethod };
-            }
-            return r;
-        }));
-
-        return resultsWithPM;
+        return this.attachPaymentMethods(results);
     }
 
     private async checkInvoiceAfterReceipt(invoiceId: string) {
@@ -162,8 +140,23 @@ export class ReceiptsService {
     }
 
     async createReceipt(body: CreateReceiptDto) {
+        // Two creation paths:
+        //   1) Invoice-linked receipt: invoiceId is provided, items reference invoice items.
+        //   2) Standalone receipt: no invoiceId; clientId + currency + items[].description required.
+        if (body.invoiceId) {
+            return this.createInvoiceLinkedReceipt(body);
+        }
+        return this.createStandaloneReceipt(body);
+    }
+
+    private async createInvoiceLinkedReceipt(body: CreateReceiptDto) {
+        if (!body.invoiceId) {
+            // Caller (createReceipt) guards against this, but narrow for TS.
+            throw new BadRequestException('Invoice ID is required for invoice-linked receipts');
+        }
+        const invoiceId = body.invoiceId;
         const invoice = await prisma.invoice.findUnique({
-            where: { id: body.invoiceId },
+            where: { id: invoiceId },
             include: {
                 company: true,
                 client: true,
@@ -172,16 +165,20 @@ export class ReceiptsService {
         });
 
         if (!invoice) {
-            logger.error('Invoice not found', { category: 'receipt', details: { invoiceId: body.invoiceId } });
+            logger.error('Invoice not found', { category: 'receipt', details: { invoiceId } });
             throw new BadRequestException('Invoice not found');
         }
 
         const receipt = await prisma.receipt.create({
             data: {
-                invoiceId: body.invoiceId,
+                invoiceId,
+                clientId: invoice.clientId,
+                companyId: invoice.companyId,
+                currency: invoice.currency,
                 items: {
                     create: body.items.map(item => ({
                         invoiceItemId: item.invoiceItemId,
+                        description: item.description,
                         amountPaid: +item.amountPaid,
                     })),
                 },
@@ -189,6 +186,7 @@ export class ReceiptsService {
                 paymentMethodId: body.paymentMethodId,
                 paymentMethod: body.paymentMethod,
                 paymentDetails: body.paymentDetails,
+                notes: body.notes,
             },
             include: {
                 items: true,
@@ -209,6 +207,74 @@ export class ReceiptsService {
         }
 
         logger.info('Receipt created', { category: 'receipt', details: { receiptId: receipt.id, companyId: invoice.company?.id } });
+
+        return receipt;
+    }
+
+    private async createStandaloneReceipt(body: CreateReceiptDto) {
+        if (!body.clientId) {
+            logger.error('Standalone receipt requires clientId', { category: 'receipt' });
+            throw new BadRequestException('A client is required when creating a receipt without an invoice.');
+        }
+        if (!body.items || body.items.length === 0) {
+            throw new BadRequestException('At least one item is required.');
+        }
+        for (const item of body.items) {
+            if (!item.description || item.description.trim().length === 0) {
+                throw new BadRequestException('Each item needs a description when there is no invoice.');
+            }
+        }
+
+        const company = await prisma.company.findFirst();
+        if (!company) {
+            logger.error('No company found. Please create a company first.', { category: 'receipt' });
+            throw new BadRequestException('No company found. Please create a company first.');
+        }
+
+        const client = await prisma.client.findUnique({ where: { id: body.clientId } });
+        if (!client) {
+            logger.error('Client not found', { category: 'receipt', details: { clientId: body.clientId } });
+            throw new BadRequestException('Client not found');
+        }
+
+        const currency = (body.currency || client.currency || company.currency) as any;
+
+        const receipt = await prisma.receipt.create({
+            data: {
+                invoiceId: null,
+                clientId: client.id,
+                companyId: company.id,
+                currency,
+                items: {
+                    create: body.items.map(item => ({
+                        invoiceItemId: null,
+                        description: item.description,
+                        amountPaid: +item.amountPaid,
+                    })),
+                },
+                totalPaid: body.items.reduce((sum, item) => sum + +item.amountPaid, 0),
+                paymentMethodId: body.paymentMethodId,
+                paymentMethod: body.paymentMethod,
+                paymentDetails: body.paymentDetails,
+                notes: body.notes,
+            },
+            include: {
+                items: true,
+            },
+        });
+
+        try {
+            await this.webhookDispatcher.dispatch(WebhookEvent.RECEIPT_CREATED, {
+                receipt,
+                invoice: null,
+                client,
+                company,
+            });
+        } catch (error) {
+            this.logger.error('Failed to dispatch RECEIPT_CREATED webhook', error);
+        }
+
+        logger.info('Standalone receipt created', { category: 'receipt', details: { receiptId: receipt.id, companyId: company.id } });
 
         return receipt;
     }
@@ -282,6 +348,7 @@ export class ReceiptsService {
                         data: body.items.map(item => ({
                             id: randomUUID(),
                             invoiceItemId: item.invoiceItemId,
+                            description: item.description,
                             amountPaid: +item.amountPaid,
                         })),
                     },
@@ -290,9 +357,12 @@ export class ReceiptsService {
                 paymentMethodId: body.paymentMethodId,
                 paymentMethod: body.paymentMethod,
                 paymentDetails: body.paymentDetails,
+                notes: body.notes,
             },
             include: {
                 items: true,
+                client: true,
+                company: true,
                 invoice: {
                     include: {
                         client: true,
@@ -302,14 +372,16 @@ export class ReceiptsService {
             },
         });
 
-        await this.checkInvoiceAfterReceipt(existingReceipt.invoiceId);
+        if (existingReceipt.invoiceId) {
+            await this.checkInvoiceAfterReceipt(existingReceipt.invoiceId);
+        }
 
         try {
             await this.webhookDispatcher.dispatch(WebhookEvent.RECEIPT_UPDATED, {
                 receipt: updatedReceipt,
-                invoice: updatedReceipt.invoice,
-                client: updatedReceipt.invoice.client,
-                company: updatedReceipt.invoice.company,
+                invoice: updatedReceipt.invoice ?? null,
+                client: updatedReceipt.invoice?.client ?? updatedReceipt.client ?? null,
+                company: updatedReceipt.invoice?.company ?? updatedReceipt.company ?? null,
             });
         } catch (error) {
             this.logger.error('Failed to dispatch RECEIPT_UPDATED webhook', error);
@@ -325,6 +397,8 @@ export class ReceiptsService {
             where: { id },
             include: {
                 items: true,
+                client: true,
+                company: true,
                 invoice: {
                     include: {
                         client: true,
@@ -347,14 +421,16 @@ export class ReceiptsService {
             where: { id },
         });
 
-        await this.checkInvoiceAfterReceipt(existingReceipt.invoiceId);
+        if (existingReceipt.invoiceId) {
+            await this.checkInvoiceAfterReceipt(existingReceipt.invoiceId);
+        }
 
         try {
             await this.webhookDispatcher.dispatch(WebhookEvent.RECEIPT_DELETED, {
                 receipt: existingReceipt,
-                invoice: existingReceipt.invoice,
-                client: existingReceipt.invoice.client,
-                company: existingReceipt.invoice.company,
+                invoice: existingReceipt.invoice ?? null,
+                client: existingReceipt.invoice?.client ?? existingReceipt.client ?? null,
+                company: existingReceipt.invoice?.company ?? existingReceipt.company ?? null,
             });
         } catch (error) {
             this.logger.error('Failed to dispatch RECEIPT_DELETED webhook', error);
@@ -370,6 +446,10 @@ export class ReceiptsService {
             where: { id: receiptId },
             include: {
                 items: true,
+                client: true,
+                company: {
+                    include: { pdfConfig: true },
+                },
                 invoice: {
                     include: {
                         items: true,
@@ -387,11 +467,26 @@ export class ReceiptsService {
             throw new BadRequestException('Receipt not found');
         }
 
-        const { pdfConfig } = receipt.invoice.company;
-        const template = Handlebars.compile(baseTemplate); // ton template reçu ici
+        // Resolve company / client / currency from invoice when present, else
+        // fall back to the receipt's own direct relations.
+        const company = receipt.invoice?.company ?? receipt.company;
+        const client = receipt.invoice?.client ?? receipt.client;
+        const currency = receipt.invoice?.currency ?? receipt.currency;
 
-        if (receipt.invoice.client.name.length == 0) {
-            receipt.invoice.client.name = receipt.invoice.client.contactFirstname + " " + receipt.invoice.client.contactLastname
+        if (!company) {
+            logger.error('Receipt has no associated company', { category: 'receipt', details: { receiptId } });
+            throw new BadRequestException('Receipt has no associated company');
+        }
+        if (!client) {
+            logger.error('Receipt has no associated client', { category: 'receipt', details: { receiptId } });
+            throw new BadRequestException('Receipt has no associated client');
+        }
+
+        const pdfConfig = (company as any).pdfConfig;
+        const template = Handlebars.compile(baseTemplate);
+
+        if (client.name.length == 0) {
+            client.name = (client.contactFirstname || '') + ' ' + (client.contactLastname || '');
         }
 
         // Map payment method enum -> PDFConfig label
@@ -404,19 +499,17 @@ export class ReceiptsService {
         };
 
         // Default payment display values
-        let paymentMethodName = receipt.paymentMethod;
-        let paymentDetails = receipt.paymentDetails;
+        let paymentMethodName: string = receipt.paymentMethod;
+        let paymentDetails: string = receipt.paymentDetails;
 
         // Prefer the saved payment method record if referenced
         if (receipt.paymentMethodId) {
             const pm = await prisma.paymentMethod.findUnique({ where: { id: receipt.paymentMethodId } });
             if (pm) {
-                // Use configured label for the payment method type when available
                 paymentMethodName = paymentMethodLabels[pm.type as string] || pm.type;
                 paymentDetails = pm.details || paymentDetails;
             }
         } else {
-            // If stored paymentMethod matches an enum, map it to configured label
             if (paymentMethodName && paymentMethodLabels[paymentMethodName.toUpperCase()]) {
                 paymentMethodName = paymentMethodLabels[paymentMethodName.toUpperCase()];
             }
@@ -431,34 +524,35 @@ export class ReceiptsService {
             PRODUCT: pdfConfig.product,
         };
 
-        const normalizedDiscountRate = clampDiscountRate(receipt.invoice.discountRate);
-        const discountFactor = 1 - normalizedDiscountRate / 100;
+        const invoiceDiscountRate = receipt.invoice ? clampDiscountRate(receipt.invoice.discountRate) : 0;
+        const discountFactor = 1 - invoiceDiscountRate / 100;
         let totalBeforeDiscount = receipt.totalPaid;
         if (discountFactor > 0 && discountFactor < 1 && receipt.items.length > 0) {
             totalBeforeDiscount = receipt.items.reduce((sum, item) => sum + (item.amountPaid / discountFactor), 0);
         }
         const discountAmountValue = Math.max(0, totalBeforeDiscount - receipt.totalPaid);
-        const hasDiscount = normalizedDiscountRate > 0 && discountAmountValue > 0;
+        const hasDiscount = invoiceDiscountRate > 0 && discountAmountValue > 0;
 
         const html = template({
             number: receipt.rawNumber || receipt.number.toString(),
-            paymentDate: formatDate(receipt.invoice.company, new Date()), // TODO: Add a payment date
+            paymentDate: formatDate(company as any, new Date()),
             invoiceNumber: receipt.invoice?.rawNumber || receipt.invoice?.number?.toString() || '',
-            client: receipt.invoice.client,
-            company: receipt.invoice.company,
-            currency: receipt.invoice.currency,
+            hasInvoice: !!receipt.invoice,
+            client,
+            company,
+            currency,
             paymentMethod: paymentMethodName,
             totalAmount: receipt.totalPaid.toFixed(2),
             totalBeforeDiscount: totalBeforeDiscount.toFixed(2),
             discountAmount: discountAmountValue.toFixed(2),
-            discountRate: Number(normalizedDiscountRate.toFixed(2)),
+            discountRate: Number(invoiceDiscountRate.toFixed(2)),
             hasDiscount,
 
             items: receipt.items.map(item => {
-                const invoiceItem = receipt.invoice.items.find(i => i.id === item.invoiceItemId);
+                const invoiceItem = receipt.invoice?.items.find(i => i.id === item.invoiceItemId);
                 return {
-                    description: invoiceItem?.description || 'N/A',
-                    type: itemTypeLabels[invoiceItem?.type as string] || invoiceItem?.type || '',
+                    description: invoiceItem?.description || item.description || 'N/A',
+                    type: invoiceItem ? (itemTypeLabels[invoiceItem.type as string] || invoiceItem.type || '') : '',
                     amount: item.amountPaid.toFixed(2),
                 };
             }),
@@ -491,7 +585,7 @@ export class ReceiptsService {
                 product: pdfConfig.product
             },
 
-            vatExemptText: receipt.invoice.company.exemptVat && (receipt.invoice.company.country || '').toUpperCase() === 'FRANCE' ? 'TVA non applicable, art. 293 B du CGI' : null,
+            vatExemptText: (company as any).exemptVat && ((company as any).country || '').toUpperCase() === 'FRANCE' ? 'TVA non applicable, art. 293 B du CGI' : null,
         });
 
         const pdfBuffer = await getPDF(html);
@@ -503,6 +597,8 @@ export class ReceiptsService {
         const receipt = await prisma.receipt.findUnique({
             where: { id },
             include: {
+                client: true,
+                company: true,
                 invoice: {
                     include: {
                         client: true,
@@ -512,9 +608,17 @@ export class ReceiptsService {
             },
         });
 
-        if (!receipt || !receipt.invoice || !receipt.invoice.client) {
-            logger.error('Receipt or associated invoice/client not found', { category: 'receipt', details: { id } });
-            throw new BadRequestException('Receipt or associated invoice/client not found');
+        if (!receipt) {
+            logger.error('Receipt not found', { category: 'receipt', details: { id } });
+            throw new BadRequestException('Receipt not found');
+        }
+
+        const client = receipt.invoice?.client ?? receipt.client;
+        const company = receipt.invoice?.company ?? receipt.company;
+
+        if (!client || !company) {
+            logger.error('Receipt has no associated client or company', { category: 'receipt', details: { id } });
+            throw new BadRequestException('Receipt has no associated client or company');
         }
 
         const pdfBuffer = await this.getReceiptPdf(id);
@@ -532,17 +636,17 @@ export class ReceiptsService {
         const envVariables = {
             APP_URL: process.env.APP_URL,
             RECEIPT_NUMBER: receipt.rawNumber || receipt.number.toString(),
-            COMPANY_NAME: receipt.invoice.company.name,
-            CLIENT_NAME: receipt.invoice.client.name,
+            COMPANY_NAME: company.name,
+            CLIENT_NAME: client.name,
         };
 
-        if (!receipt.invoice.client.contactEmail) {
+        if (!client.contactEmail) {
             logger.error('Client has no email configured; receipt not sent', { category: 'receipt', details: { id } });
             throw new BadRequestException('Client has no email configured; receipt not sent');
         }
 
         const mailOptions = {
-            to: receipt.invoice.client.contactEmail,
+            to: client.contactEmail,
             subject: mailTemplate.subject.replace(/{{(\w+)}}/g, (_, key) => envVariables[key] || ''),
             html: mailTemplate.body.replace(/{{(\w+)}}/g, (_, key) => envVariables[key] || ''),
             attachments: [{

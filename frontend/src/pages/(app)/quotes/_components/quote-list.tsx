@@ -154,7 +154,7 @@ export const QuoteList = forwardRef<QuoteListHandle, QuoteListProps>(
                 <Card className="gap-0">
                     <CardHeader className="border-b flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle className="flex items-center space-x-2">
+                            <CardTitle className="flex items-center gap-2">
                                 <FileText className="h-5 w-5 " />
                                 <span>{title}</span>
                             </CardTitle>
@@ -162,7 +162,7 @@ export const QuoteList = forwardRef<QuoteListHandle, QuoteListProps>(
                         </div>
                         {showCreateButton && (
                             <Button onClick={handleAddClick}>
-                                <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                                <Plus className="h-4 w-4 me-0 md:me-2" />
                                 <span className="hidden md:inline-flex">{t("quotes.list.actions.addNew")}</span>
                             </Button>
                         )}

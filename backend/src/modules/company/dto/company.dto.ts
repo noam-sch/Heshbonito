@@ -64,6 +64,7 @@ export class EditCompanyDto {
     currency: finance.TCurrency
     VAT?: string
     exemptVat?: boolean
+    defaultVatRate?: number
     address: string
     addressLine2?: string
     postalCode: string

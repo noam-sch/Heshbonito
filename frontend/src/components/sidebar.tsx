@@ -110,7 +110,7 @@ export function Sidebar() {
     }
 
     return (
-        <RootSidebar collapsible="icon">
+        <RootSidebar collapsible="icon" side="right">
             <OnBoarding isOpen={!companyLoading && (!company || !company.name) && location.pathname !== "/settings/company"} />
 
             <SidebarHeader className="px-2">
@@ -219,7 +219,7 @@ export function Sidebar() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem className="cursor-pointer">
+                                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings/account')}>
                                         <User className="w-4 h-4" />
                                         {t("sidebar.userMenu.account")}
                                     </DropdownMenuItem>

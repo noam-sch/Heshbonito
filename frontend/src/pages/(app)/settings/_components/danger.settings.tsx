@@ -122,7 +122,7 @@ export default function DangerZoneSettings() {
                             onClick={() => requestOtp("all")}
                             disabled={isLoadingOtp}
                         >
-                            {isLoadingOtp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Database className="mr-2 h-4 w-4" />}
+                            {isLoadingOtp ? <Loader2 className="me-2 h-4 w-4 animate-spin" /> : <Database className="me-2 h-4 w-4" />}
                             {t("settings.dangerZone.resetDatabase.button")}
                         </Button>
                     </CardContent>

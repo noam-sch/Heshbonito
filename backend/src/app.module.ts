@@ -8,6 +8,7 @@ import { ClientsModule } from './modules/clients/clients.module';
 import { CompanyModule } from './modules/company/company.module';
 import { ConfigModule } from '@nestjs/config';
 import { DangerModule } from './modules/danger/danger.module';
+import { ExcelModule } from './modules/excel/excel.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { DirectoryModule } from './modules/directory/directory.module';
 import { InvitationsModule } from './modules/invitations/invitations.module';
@@ -45,6 +46,7 @@ import { auth } from "./lib/auth"
     DashboardModule,
     SignaturesModule,
     DangerModule,
+    ExcelModule,
     DirectoryModule,
     PluginsModule,
     RecurringInvoicesModule,

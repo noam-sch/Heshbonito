@@ -467,7 +467,7 @@ export class InvoicesService {
 
         inv.id = invRec.rawNumber || invRec.number.toString();
         inv.issueDate = new Date(invRec.createdAt.toISOString().split('T')[0]);
-        inv.currency = invRec.company.currency as finance.TCurrency || 'EUR';
+        inv.currency = invRec.company.currency as finance.TCurrency || 'ILS';
 
         let fromAdress;
         try {

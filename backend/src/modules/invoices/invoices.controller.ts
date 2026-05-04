@@ -27,12 +27,12 @@ export class InvoicesController {
   ) { }
 
   @Get()
-  async getInvoicesInfo(@Param('page') page: string) {
+  async getInvoicesInfo(@Query('page') page: string) {
     return await this.invoicesService.getInvoices(page);
   }
 
   @Sse('sse')
-  async getInvoicesInfoSse(@Param('page') page: string) {
+  async getInvoicesInfoSse(@Query('page') page: string) {
     return interval(1000).pipe(
       startWith(0),
       switchMap(() => from(this.invoicesService.getInvoices(page))),
@@ -41,7 +41,7 @@ export class InvoicesController {
   }
 
   @Get('search')
-  async searchInvoices(@Param('query') query: string) {
+  async searchInvoices(@Query('query') query: string) {
     return await this.invoicesService.searchInvoices(query);
   }
 

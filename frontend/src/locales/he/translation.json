@@ -221,7 +221,8 @@
                 "draft": "טיוטה",
                 "sent": "נשלח",
                 "expired": "פג תוקף",
-                "signed": "חתום"
+                "signed": "חתום",
+                "viewed": "נצפה"
             },
             "item": {
                 "title": "הצעת מחיר {{number}} {{title}}",
@@ -348,7 +349,8 @@
                 "draft": "טיוטה",
                 "sent": "נשלח",
                 "expired": "פג תוקף",
-                "signed": "חתום"
+                "signed": "חתום",
+                "viewed": "נצפה"
             },
             "fields": {
                 "title": "כותרת",
@@ -1135,8 +1137,17 @@
                     }
                 },
                 "exemptVat": {
-                    "label": "מע\"מ לא ישים",
-                    "description": "הצג את ההודעה המשפטית 'מע\"מ לא ישים, סעיף 293 ב' של CGI' במסמכים עתידיים כאשר מופעל ואם מדינת החברה היא צרפת."
+                    "label": "פטור ממע\"מ",
+                    "description": "כאשר מופעל, הסכום יחושב ללא מע\"מ וייכתב 'עוסק פטור ממע\"מ' על המסמכים."
+                },
+                "defaultVatRate": {
+                    "label": "שיעור מע\"מ ברירת מחדל",
+                    "description": "שיעור מע\"מ שיוצמד אוטומטית לפריטים חדשים בהצעות ובחשבוניות. שיעור מע\"מ בישראל הוא 18%.",
+                    "errors": {
+                        "invalid": "אנא הזן מספר תקין",
+                        "min": "שיעור מע\"מ לא יכול להיות שלילי",
+                        "max": "שיעור מע\"מ לא יכול לעלות על 100%"
+                    }
                 },
                 "saving": "שומר...",
                 "saveSettings": "שמור הגדרות"
@@ -1460,6 +1471,42 @@
                 "delete": "מחק",
                 "editPrompt": "הכנס כתובת URL חדשה לווב-הוק"
             }
+        },
+        "logs": {
+            "title": "יומני פעילות",
+            "description": "צפה בלוגי המערכת ופעילות המשתמשים",
+            "searchPlaceholder": "חפש לוגים...",
+            "dateRange": "טווח תאריכים",
+            "dateFrom": "מתאריך",
+            "dateTo": "עד תאריך",
+            "clearFilters": "נקה סינון",
+            "level": "רמה:",
+            "category": "קטגוריה:",
+            "allCategories": "כל הקטגוריות",
+            "showing": "מציג {{filtered}} מתוך {{total}} לוגים",
+            "noLogsFound": "לא נמצאו לוגים",
+            "page": "עמוד {{current}} מתוך {{total}}",
+            "previous": "הקודם",
+            "next": "הבא",
+            "columns": {
+                "timestamp": "חותמת זמן",
+                "level": "רמה",
+                "category": "קטגוריה",
+                "message": "הודעה",
+                "userId": "מזהה משתמש",
+                "path": "נתיב"
+            },
+            "details": {
+                "title": "פרטי לוג",
+                "timestamp": "חותמת זמן",
+                "category": "קטגוריה",
+                "userId": "מזהה משתמש",
+                "path": "נתיב",
+                "message": "הודעה",
+                "detailsJson": "פרטים (JSON)",
+                "logId": "מזהה לוג",
+                "na": "לא זמין"
+            }
         }
     },
     "sidebar": {
@@ -1582,6 +1629,10 @@
         }
     },
     "common": {
+        "pagination": {
+            "previous": "הקודם",
+            "next": "הבא"
+        },
         "previous": "הקודם",
         "next": "הבא",
         "loading": "טוען...",
@@ -1784,5 +1835,131 @@
         "selectThisFolder": "בחר תיקייה זו",
         "noSubdirectories": "לא נמצאו תת-תיקיות",
         "loading": "טוען ספריות..."
+    },
+    "onboarding": {
+        "steps": {
+            "basic": "פרטים בסיסיים",
+            "address": "כתובת",
+            "contact": "יצירת קשר",
+            "settings": "הגדרות"
+        }
+    },
+    "signaturePage": {
+        "loading": "טוען...",
+        "loadingSignature": "טוען חתימה...",
+        "loadingPdf": "טוען PDF...",
+        "title": "חתימה על הצעת מחיר",
+        "subtitle": "הצעת מחיר {{number}} • פג תוקף ב-{{date}}",
+        "signed": {
+            "title": "הצעה נחתמה",
+            "description": "הצעה זו נחתמה בתאריך {{date}}"
+        },
+        "expired": {
+            "title": "חתימה פגה תוקף",
+            "description": "קישור החתימה פג תוקף בתאריך {{date}}"
+        },
+        "ready": {
+            "title": "חתימה על הצעת מחיר",
+            "description": "לחתום על הצעה זו, לחץ על הכפתור למטה. קוד אימות יישלח לכתובת האימייל שלך.",
+            "sendCode": "שלח קוד אימות",
+            "sending": "שולח..."
+        },
+        "otpSent": {
+            "title": "קוד אימות נשלח",
+            "description": "קוד אימות נשלח לכתובת האימייל שלך. אנא הזן אותו למטה כדי לחתום על ההצעה.",
+            "label": "קוד אימות",
+            "sign": "חתום על הצעה",
+            "signing": "מתבצעת חתימה...",
+            "cancel": "ביטול"
+        },
+        "error": {
+            "description": "אירעה שגיאה בעת עיבוד הבקשה שלך. אנא נסה שוב מאוחר יותר.",
+            "retry": "נסה שוב",
+            "sendOtpFailed": "שגיאה בשליחת קוד אימות",
+            "signFailed": "שגיאה בחתימה על ההצעה"
+        },
+        "preview": {
+            "title": "תצוגה מקדימה של הצעה",
+            "error": "שגיאה בטעינת PDF",
+            "retry": "נסה שוב",
+            "download": "הורד PDF"
+        },
+        "info": {
+            "title": "פרטי הצעה",
+            "number": "מספר:",
+            "status": "סטטוס:",
+            "expiresOn": "פג תוקף ב:",
+            "signedOn": "נחתם ב:"
+        },
+        "status": {
+            "signed": "חתום",
+            "expired": "פג תוקף",
+            "viewed": "נצפה",
+            "sent": "נשלח",
+            "draft": "טיוטה"
+        }
+    },
+    "excel": {
+        "export": {
+            "button": "ייצוא לאקסל",
+            "quotes": "ייצוא הצעות מחיר",
+            "invoices": "ייצוא חשבוניות",
+            "receipts": "ייצוא קבלות",
+            "success": "הקובץ הורד בהצלחה",
+            "error": "שגיאה בייצוא הקובץ"
+        },
+        "import": {
+            "button": "ייבוא מאקסל",
+            "title": "ייבוא מקובץ אקסל",
+            "quotes": "ייבוא הצעות מחיר",
+            "invoices": "ייבוא חשבוניות",
+            "upload": "העלה קובץ (.xlsx)",
+            "dragDrop": "גרור ושחרר קובץ כאן, או לחץ לבחירה",
+            "processingFile": "מעבד קובץ...",
+            "noTemplate": "אין לך תבנית? הורד תבנית מוכנה לשימוש",
+            "downloadTemplate": "הורד תבנית",
+            "validRows": "{{count}} שורות תקינות",
+            "errorRows": "{{count}} שורות עם שגיאות",
+            "documents": "{{count}} מסמכים",
+            "errors": "שגיאות",
+            "moreErrors": "...ועוד {{count}} שגיאות",
+            "moreRows": "...ועוד {{count}} שורות",
+            "importing": "מייבא מסמכים...",
+            "cancel": "ביטול",
+            "back": "חזור",
+            "colClient": "לקוח",
+            "colDescription": "תיאור",
+            "colQuantity": "כמות",
+            "colPrice": "מחיר",
+            "confirm": "ייבא {{count}} מסמכים",
+            "success": "{{count}} מסמכים יובאו בהצלחה",
+            "error": "שגיאה בייבוא הקובץ",
+            "noFile": "לא נבחר קובץ",
+            "invalidFile": "קובץ לא תקין - יש להעלות קובץ .xlsx",
+            "preview": "תצוגה מקדימה",
+            "row": "שורה",
+            "field": "שדה",
+            "errorMessage": "שגיאה",
+            "clientNotFound": "לקוח לא נמצא: {{name}}",
+            "columns": {
+                "number": "מספר",
+                "date": "תאריך",
+                "client": "לקוח",
+                "title": "כותרת",
+                "status": "סטטוס",
+                "subtotal": "סכום לפני מע\"מ",
+                "vat": "מע\"מ",
+                "total": "סה\"כ",
+                "currency": "מטבע",
+                "description": "תיאור",
+                "quantity": "כמות",
+                "unitPrice": "מחיר יחידה",
+                "type": "סוג",
+                "vatRate": "שיעור מע\"מ",
+                "documentNumber": "מספר מסמך",
+                "dueDate": "תאריך פירעון",
+                "notes": "הערות"
+            }
+        }
     }
 }

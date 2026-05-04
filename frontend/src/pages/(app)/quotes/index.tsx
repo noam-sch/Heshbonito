@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import { useGetRaw, useSse } from "@/hooks/use-fetch"
 
 import { Button } from "@/components/ui/button"
+import { ExcelExportButton } from "@/components/excel-export-button"
+import { ExcelImportDialog } from "@/components/excel-import-dialog"
 import { Input } from "@/components/ui/input"
 import type { Quote } from "@/types"
 import { QuoteList } from "@/pages/(app)/quotes/_components/quote-list"
@@ -36,6 +38,7 @@ export default function Quotes() {
     }, [downloadQuotePdf, pdf])
 
     const [searchTerm, setSearchTerm] = useState("")
+    const [importOpen, setImportOpen] = useState(false)
 
     const filteredQuotes =
         quotes?.quotes.filter(
@@ -56,7 +59,7 @@ export default function Quotes() {
             {!searchTerm && (
                 <div className="mt-6">
                     <Button onClick={() => quoteListRef.current?.handleAddClick()}>
-                        <Plus className="h-4 w-4 mr-2" />
+                        <Plus className="h-4 w-4 me-2" />
                         {t("quotes.actions.addNew")}
                     </Button>
                 </div>
@@ -67,7 +70,7 @@ export default function Quotes() {
     return (
         <div className="max-w-7xl mx-auto space-y-6 p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 lg:justify-between">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 rounded-lg">
                         <FileText className="h-5 w-5 text-blue-600" />
                     </div>
@@ -84,16 +87,22 @@ export default function Quotes() {
 
                 <div className="flex flex-row items-center gap-4 w-full lg:w-fit lg:gap-6 lg:justify-between">
                     <div className="relative w-full lg:w-fit">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute start-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input
                             placeholder={t("quotes.search.placeholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-full"
+                            className="ps-10 w-full"
                         />
                     </div>
+                    <ExcelImportDialog type="quotes" open={importOpen} onOpenChange={setImportOpen} />
+                    <ExcelExportButton type="quotes" variant="outline" size="default" />
+                    <Button variant="outline" onClick={() => setImportOpen(true)}>
+                        <span className="hidden md:inline-flex">{t("excel.import.button")}</span>
+                        <span className="md:hidden">⬆</span>
+                    </Button>
                     <Button onClick={() => quoteListRef.current?.handleAddClick()}>
-                        <Plus className="h-4 w-4 mr-0 md:mr-2" />
+                        <Plus className="h-4 w-4 me-0 md:me-2" />
                         <span className="hidden md:inline-flex">{t("quotes.actions.addNew")}</span>
                     </Button>
                 </div>
@@ -102,7 +111,7 @@ export default function Quotes() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-100 rounded-lg">
                                 <FileText className="h-6 w-6 text-blue-600" />
                             </div>
@@ -116,7 +125,7 @@ export default function Quotes() {
 
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-yellow-100 rounded-lg">
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
@@ -134,7 +143,7 @@ export default function Quotes() {
 
                 <Card>
                     <CardContent>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center gap-4">
                             <div className="p-3 bg-blue-100 rounded-lg">
                                 <div className="w-6 h-6 flex items-center justify-center">
                                     <div className="w-3 h-3 bg-blue-500 rounded-full"></div>

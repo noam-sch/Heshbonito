@@ -105,7 +105,7 @@ export function InvoiceUpsert({ invoice, open, onOpenChange }: InvoiceUpsertDial
             clientId: "",
             dueDate: undefined,
             paymentMethodId: "",
-            currency: undefined,
+            currency: "ILS",
             discountRate: 0,
             items: [],
             notes: "",
@@ -142,7 +142,7 @@ export function InvoiceUpsert({ invoice, open, onOpenChange }: InvoiceUpsertDial
                 dueDate: undefined,
                 notes: "",
                 paymentMethodId: "",
-                currency: undefined,
+                currency: "ILS",
                 discountRate: 0,
                 items: [],
             })

@@ -646,7 +646,7 @@ export default function PDFTemplatesSettings() {
                 <ResizablePanelGroup direction="horizontal" className="!h-[calc(100dvh-18rem)]">
                     <ResizablePanel defaultSize={45} minSize={30} maxSize={70}>
                         <div className="h-full flex flex-col">
-                            <div className="flex-1 overflow-y-auto pr-4">
+                            <div className="flex-1 overflow-y-auto pe-4">
                                 <div className="space-y-6">
                                     <Card>
                                         <CardHeader>
@@ -716,7 +716,7 @@ export default function PDFTemplatesSettings() {
                                         <CardContent className="space-y-4">
                                             <div className="space-y-2">
                                                 <Label htmlFor="primary-color">{t("settings.pdfTemplates.colors.primaryColor")}</Label>
-                                                <div className="flex items-center space-x-2">
+                                                <div className="flex items-center gap-2">
                                                     <input
                                                         type="color"
                                                         id="primary-color"
@@ -733,7 +733,7 @@ export default function PDFTemplatesSettings() {
                                             </div>
                                             <div className="space-y-2">
                                                 <Label htmlFor="primary-color">{t("settings.pdfTemplates.colors.secondaryColor")}</Label>
-                                                <div className="flex items-center space-x-2">
+                                                <div className="flex items-center gap-2">
                                                     <input
                                                         type="color"
                                                         id="primary-color"
@@ -757,7 +757,7 @@ export default function PDFTemplatesSettings() {
                                             <CardDescription>{t("settings.pdfTemplates.logo.description")}</CardDescription>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex items-center gap-2">
                                                 <Switch
                                                     id="include-logo"
                                                     checked={settings.includeLogo}
@@ -777,7 +777,7 @@ export default function PDFTemplatesSettings() {
                                                             <Button
                                                                 variant="destructive"
                                                                 size="sm"
-                                                                className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                                                                className="absolute -top-2 -end-2 h-6 w-6 rounded-full p-0"
                                                                 onClick={removeLogo}
                                                             >
                                                                 <X className="h-3 w-3" />

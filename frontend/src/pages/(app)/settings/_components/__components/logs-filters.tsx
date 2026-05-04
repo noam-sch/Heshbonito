@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslation } from "react-i18next"
 
 type LogsFiltersProps = {
   levelFilter: LogLevel[]
@@ -48,6 +49,8 @@ export function LogsFilters({
   filteredCount,
   onRefresh,
 }: LogsFiltersProps) {
+  const { t } = useTranslation()
+
   function toggleLevel(level: LogLevel) {
     if (levelFilter.includes(level)) {
       setLevelFilter(levelFilter.filter((l) => l !== level))
@@ -78,12 +81,12 @@ export function LogsFilters({
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search logs..."
+            placeholder={t("settings.logs.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
+            className="ps-9"
           />
         </div>
 
@@ -100,14 +103,14 @@ export function LogsFilters({
                   dateRange.from.toLocaleDateString()
                 )
               ) : (
-                "Date Range"
+                t("settings.logs.dateRange")
               )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <div className="p-3 space-y-2">
               <div>
-                <label className="text-sm font-medium">From</label>
+                <label className="text-sm font-medium">{t("settings.logs.dateFrom")}</label>
                 <CalendarComponent
                   mode="single"
                   selected={dateRange.from || undefined}
@@ -115,7 +118,7 @@ export function LogsFilters({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">To</label>
+                <label className="text-sm font-medium">{t("settings.logs.dateTo")}</label>
                 <CalendarComponent
                   mode="single"
                   selected={dateRange.to || undefined}
@@ -132,14 +135,14 @@ export function LogsFilters({
 
         {hasActiveFilters && (
           <Button onClick={clearFilters} variant="ghost">
-            Clear Filters
+            {t("settings.logs.clearFilters")}
           </Button>
         )}
       </div>
 
       <div className="flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-muted-foreground">Level:</span>
+          <span className="text-sm font-medium text-muted-foreground">{t("settings.logs.level")}</span>
           <div className="flex gap-1.5">
             {LOG_LEVELS.map((level) => (
               <Badge
@@ -156,7 +159,7 @@ export function LogsFilters({
 
         {categories.length > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-muted-foreground">Category:</span>
+            <span className="text-sm font-medium text-muted-foreground">{t("settings.logs.category")}</span>
             <Select
               value={categoryFilter[0] || "all"}
               onValueChange={(value) => {
@@ -168,10 +171,10 @@ export function LogsFilters({
               }}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All categories" />
+                <SelectValue placeholder={t("settings.logs.allCategories")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All categories</SelectItem>
+                <SelectItem value="all">{t("settings.logs.allCategories")}</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -182,8 +185,8 @@ export function LogsFilters({
           </div>
         )}
 
-        <div className="ml-auto text-sm text-muted-foreground">
-          Showing {filteredCount.toLocaleString()} of {totalLogs.toLocaleString()} logs
+        <div className="ms-auto text-sm text-muted-foreground">
+          {t("settings.logs.showing", { filtered: filteredCount.toLocaleString(), total: totalLogs.toLocaleString() })}
         </div>
       </div>
     </div>

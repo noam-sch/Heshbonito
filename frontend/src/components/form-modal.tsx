@@ -281,7 +281,7 @@ export function DynamicFormModal({ open, title, description, config, currentValu
 
             case "switch":
                 return (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center gap-2">
                         <Switch checked={value} onCheckedChange={onChange} name={name} />
                     </div>
                 )
@@ -335,7 +335,7 @@ export function DynamicFormModal({ open, title, description, config, currentValu
                                     <FormItem>
                                         <FormLabel>
                                             {field.label}
-                                            {field.required && <span className="text-destructive ml-1">*</span>}
+                                            {field.required && <span className="text-destructive ms-1">*</span>}
                                         </FormLabel>
                                         <FormControl>{renderField(field, formField)}</FormControl>
                                         <FormMessage />

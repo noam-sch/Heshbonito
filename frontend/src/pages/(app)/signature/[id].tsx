@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
 import { useEffect, useState } from "react"
 import { useGet, useGetRaw, usePost } from "@/hooks/use-fetch"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -23,6 +24,7 @@ interface Signature {
 type SignatureState = "loading" | "ready" | "otp-sent" | "signing" | "signed" | "expired" | "error"
 
 export default function Signature() {
+    const { t } = useTranslation()
     const { id } = useParams()
     const { data: signature, mutate } = useGet<Signature>(`/api/signatures/${id}`)
     const { data: pdfResponse } = useGetRaw<Response>(`/api/quotes/${signature?.quote.id}/pdf`)
@@ -83,7 +85,7 @@ export default function Signature() {
                 setOtpCode("")
             })
             .catch((error) => {
-                toast.error(error.message || "Failed to send OTP code")
+                toast.error(error.message || t("signaturePage.error.sendOtpFailed"))
                 setState("error")
             })
     }
@@ -99,7 +101,7 @@ export default function Signature() {
                 mutate()
             })
             .catch((error) => {
-                toast.error(error.message || "Failed to sign quote")
+                toast.error(error.message || t("signaturePage.error.signFailed"))
                 setState("error")
             })
     }
@@ -135,6 +137,11 @@ export default function Signature() {
         setOtpCode(cleanedValue)
     }
 
+    const getStatusLabel = (status: string) => {
+        const key = status.toLowerCase() as "signed" | "expired" | "viewed" | "sent" | "draft"
+        return t(`signaturePage.status.${key}`, { defaultValue: status })
+    }
+
     const renderSignatureStatus = () => {
         switch (state) {
             case "loading":
@@ -142,7 +149,7 @@ export default function Signature() {
                     <Card>
                         <CardContent className="flex items-center justify-center p-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                            <span className="ml-3">Loading...</span>
+                            <span className="ms-3">{t("signaturePage.loading")}</span>
                         </CardContent>
                     </Card>
                 )
@@ -151,12 +158,13 @@ export default function Signature() {
                 return (
                     <Card className="border-green-200 bg-green-50">
                         <CardContent className="flex items-center p-6">
-                            <CheckCircle className="h-6 w-6 text-green-600 mr-3" />
+                            <CheckCircle className="h-6 w-6 text-green-600 me-3" />
                             <div>
-                                <h3 className="font-semibold text-green-800">Quote signed</h3>
+                                <h3 className="font-semibold text-green-800">{t("signaturePage.signed.title")}</h3>
                                 <p className="text-sm text-green-600">
-                                    This quote was signed on{" "}
-                                    {signature?.signedAt ? new Date(signature.signedAt).toLocaleDateString() : ""}
+                                    {t("signaturePage.signed.description", {
+                                        date: signature?.signedAt ? new Date(signature.signedAt).toLocaleDateString() : ""
+                                    })}
                                 </p>
                             </div>
                         </CardContent>
@@ -167,12 +175,13 @@ export default function Signature() {
                 return (
                     <Card className="border-red-200 bg-red-50">
                         <CardContent className="flex items-center p-6">
-                            <Clock className="h-6 w-6 text-red-600 mr-3" />
+                            <Clock className="h-6 w-6 text-red-600 me-3" />
                             <div>
-                                <h3 className="font-semibold text-red-800">Signature expired</h3>
+                                <h3 className="font-semibold text-red-800">{t("signaturePage.expired.title")}</h3>
                                 <p className="text-sm text-red-600">
-                                    This signature link expired on{" "}
-                                    {signature?.expiresAt ? new Date(signature.expiresAt).toLocaleDateString() : ""}
+                                    {t("signaturePage.expired.description", {
+                                        date: signature?.expiresAt ? new Date(signature.expiresAt).toLocaleDateString() : ""
+                                    })}
                                 </p>
                             </div>
                         </CardContent>
@@ -184,17 +193,17 @@ export default function Signature() {
                     <Card>
                         <CardHeader>
                             <h3 className="font-semibold flex items-center">
-                                <FileText className="h-5 w-5 mr-2" />
-                                Quote signature
+                                <FileText className="h-5 w-5 me-2" />
+                                {t("signaturePage.ready.title")}
                             </h3>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                To sign this quote, click the button below. A verification code will be sent by email.
+                                {t("signaturePage.ready.description")}
                             </p>
                             <Button data-cy="send-otp-btn" onClick={handleSendOtp} disabled={optCodeloading} className="w-full">
-                                <Mail className="h-4 w-4 mr-2" />
-                                {optCodeloading ? "Sending..." : "Send verification code"}
+                                <Mail className="h-4 w-4 me-2" />
+                                {optCodeloading ? t("signaturePage.ready.sending") : t("signaturePage.ready.sendCode")}
                             </Button>
                         </CardContent>
                     </Card>
@@ -205,21 +214,21 @@ export default function Signature() {
                     <Card>
                         <CardHeader>
                             <h3 className="font-semibold flex items-center">
-                                <Mail className="h-5 w-5 mr-2" />
-                                Verification code sent
+                                <Mail className="h-5 w-5 me-2" />
+                                {t("signaturePage.otpSent.title")}
                             </h3>
                         </CardHeader>
                         <CardContent>
                             <Alert className="mb-4">
                                 <AlertCircle className="h-4 w-4" />
                                 <AlertDescription>
-                                    A verification code has been sent to your email address. Please enter it below to sign the quote.
+                                    {t("signaturePage.otpSent.description")}
                                 </AlertDescription>
                             </Alert>
 
                             <form onSubmit={handleSignWithOtp} className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="otp">Verification code</Label>
+                                    <Label htmlFor="otp">{t("signaturePage.otpSent.label")}</Label>
                                     <section className="flex flex-col items-center">
                                         <InputOTP autoComplete={"one-time-code"} maxLength={8} minLength={8} value={otpCode} onChange={handleOtpChange} onPaste={handleOtpPaste} className="w-full">
                                             <InputOTPGroup>
@@ -239,10 +248,10 @@ export default function Signature() {
 
                                 <div className="flex gap-2">
                                     <Button data-cy="sign-quote-btn" type="submit" disabled={signingLoading || !otpCode.trim()} className="flex-1">
-                                        {signingLoading ? "Signing in progress..." : "Sign quote"}
+                                        {signingLoading ? t("signaturePage.otpSent.signing") : t("signaturePage.otpSent.sign")}
                                     </Button>
                                     <Button type="button" variant="outline" onClick={() => setState("ready")} disabled={signingLoading}>
-                                        Cancel
+                                        {t("signaturePage.otpSent.cancel")}
                                     </Button>
                                 </div>
                             </form>
@@ -255,7 +264,7 @@ export default function Signature() {
                     <Card>
                         <CardContent className="flex items-center justify-center p-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                            <span className="ml-3">Signing in progress...</span>
+                            <span className="ms-3">{t("signaturePage.otpSent.signing")}</span>
                         </CardContent>
                     </Card>
                 )
@@ -267,11 +276,11 @@ export default function Signature() {
                             <Alert variant="destructive">
                                 <AlertCircle className="h-4 w-4" />
                                 <AlertDescription>
-                                    An error occurred while processing your request. Please try again later.
+                                    {t("signaturePage.error.description")}
                                 </AlertDescription>
                             </Alert>
                             <Button onClick={() => setState("ready")} variant="outline" className="mt-4">
-                                Retry
+                                {t("signaturePage.error.retry")}
                             </Button>
                         </CardContent>
                     </Card>
@@ -288,7 +297,7 @@ export default function Signature() {
                 <Card>
                     <CardContent className="flex items-center justify-center p-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                        <span className="ml-3">Loading signature...</span>
+                        <span className="ms-3">{t("signaturePage.loadingSignature")}</span>
                     </CardContent>
                 </Card>
             </div>
@@ -298,9 +307,12 @@ export default function Signature() {
     return (
         <div className="max-w-7xl mx-auto space-y-6 px-6 py-8">
             <div className="space-y-2">
-                <h1 className="text-3xl font-bold">Quote Signature</h1>
+                <h1 className="text-3xl font-bold">{t("signaturePage.title")}</h1>
                 <p className="text-muted-foreground">
-                    Quote #{signature.quote.number} • Expires on {new Date(signature.expiresAt).toLocaleDateString()}
+                    {t("signaturePage.subtitle", {
+                        number: signature.quote.number,
+                        date: new Date(signature.expiresAt).toLocaleDateString()
+                    })}
                 </p>
             </div>
 
@@ -308,7 +320,7 @@ export default function Signature() {
                 <div className="lg:col-span-2">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
-                            <h2 className="font-semibold">Quote Preview</h2>
+                            <h2 className="font-semibold">{t("signaturePage.preview.title")}</h2>
                             <div className="flex items-center gap-2">
                                 <Button
                                     variant="outline"
@@ -353,22 +365,22 @@ export default function Signature() {
                                 ) : pdfError ? (
                                     <div className="flex flex-col items-center justify-center h-96 p-8 text-center">
                                         <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-                                        <p className="text-red-600 mb-4">Error loading PDF</p>
+                                        <p className="text-red-600 mb-4">{t("signaturePage.preview.error")}</p>
                                         <div className="flex gap-2">
                                             <Button onClick={handleRefreshPdf} variant="outline">
-                                                <RefreshCw className="h-4 w-4 mr-2" />
-                                                Retry
+                                                <RefreshCw className="h-4 w-4 me-2" />
+                                                {t("signaturePage.preview.retry")}
                                             </Button>
                                             <Button onClick={handleDownloadPdf} variant="outline">
-                                                <Download className="h-4 w-4 mr-2" />
-                                                Download PDF
+                                                <Download className="h-4 w-4 me-2" />
+                                                {t("signaturePage.preview.download")}
                                             </Button>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center h-96">
                                         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500"></div>
-                                        <span className="ml-3">Loading PDF...</span>
+                                        <span className="ms-3">{t("signaturePage.loadingPdf")}</span>
                                     </div>
                                 )}
                             </div>
@@ -380,15 +392,15 @@ export default function Signature() {
                     {renderSignatureStatus()}
                     <Card>
                         <CardHeader>
-                            <h3 className="font-semibold">Quote Information</h3>
+                            <h3 className="font-semibold">{t("signaturePage.info.title")}</h3>
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Number:</span>
+                                <span className="text-muted-foreground">{t("signaturePage.info.number")}</span>
                                 <span className="font-medium">#{signature.quote.number}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Status:</span>
+                                <span className="text-muted-foreground">{t("signaturePage.info.status")}</span>
                                 <span
                                     className={`font-medium ${signature.quote.status === "SIGNED"
                                         ? "text-green-600"
@@ -397,24 +409,16 @@ export default function Signature() {
                                             : "text-blue-600"
                                         }`}
                                 >
-                                    {signature.quote.status === "SIGNED"
-                                        ? "Signed"
-                                        : signature.quote.status === "EXPIRED"
-                                            ? "Expired"
-                                            : signature.quote.status === "VIEWED"
-                                                ? "Viewed"
-                                                : signature.quote.status === "SENT"
-                                                    ? "Sent"
-                                                    : "Draft"}
+                                    {getStatusLabel(signature.quote.status)}
                                 </span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Expires on:</span>
+                                <span className="text-muted-foreground">{t("signaturePage.info.expiresOn")}</span>
                                 <span className="font-medium">{new Date(signature.expiresAt).toLocaleDateString()}</span>
                             </div>
                             {signature.signedAt && (
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Signed on:</span>
+                                    <span className="text-muted-foreground">{t("signaturePage.info.signedOn")}</span>
                                     <span className="font-medium text-green-600">
                                         {new Date(signature.signedAt).toLocaleDateString()}
                                     </span>
